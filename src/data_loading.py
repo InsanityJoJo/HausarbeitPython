@@ -10,7 +10,8 @@ class DataLoader:
     '''
     def __init__(self, file_path):
         '''
-        Diese Methode legt den Pfad der CSV-Datei fest. Sie stellt sicher, dass die Datei existiert.
+        Der Konstruktor legt den Pfad der CSV-Datei fest. 
+        Hier wird zudem sicher gestellt, dass die Datei existiert vom Typ CSV ist.
 
         Methodenparameter:
         - self
@@ -19,14 +20,13 @@ class DataLoader:
         # Sollte die Datei nicht existieren, wird eine FileNotFoundError geworfen.
         if not os.path.exists(file_path):
             # raised den FileNotFoundError mit eigener Nachricht.
-            raise FileNotFoundError(f"Die Datei {file_path} konnte nicht gefunden werden")
+            raise FileNotFoundError(Messages.file_not_found_msg(file_path=file_path))
 
         # Sollte die Datei nicht auf .csv oder .CSV enden, dann wird ein TypeError geworfen.
         elif not file_path[-4:].lower() == ".csv":
             # wirft den TypeError mit eigener Nachricht
-            raise TypeError(f"Die Datei {file_path} ist nicht vom Typ .csv")
+            raise TypeError(Messages.file_wrong_type_msg(file_path=file_path))
         else:
-            
             self.file_path = file_path
 
     def load_data(self):
