@@ -1,6 +1,7 @@
 import pytest
 import pandas as pd
 from src.data_loading import DataLoader
+from src.status_messages import Messages
 '''
 Dieser Test soll sicherstellen, dass ein Laden der Daten aus einer CSV möglichlich ist.
 '''
@@ -40,10 +41,34 @@ def test_load_data():
     # Check, dass hier die erwatete Fehlermedung übergeben wurde.
     assert "Die Datei data/example_data/textdatei.txt ist nicht vom Typ .csv" in str(teexc_info.value)
 
-    # Dieser Testfall überprüft, den ValueError der geworfen werden soll, wenn eine CSV-Datei nicht das gewünschte Format hat.
-    with pytest.raises(ValueError) as veexc_info:
-        loader4 = DataLoader("data/example_data/wrongformat.csv")
-        data4 = loader4.load_data()
-        loader4.validate_csv_format(data4)
 
-    assert "Die CSV-Datei hat nicht das richtige Format." in str(veexc_info.value)
+
+def test_validate_csv_format():
+    '''
+    Die Methode enthält Testfälle für die Validierung des Formats der Trainings-, Test- und Idealdaten.
+    Sowie wie die Üperfrügung der Fehlernachricht wenn das Format invalid ist.
+    
+    '''
+
+
+    # Dieser Testfall überrüft, of eine CSV-Datei die dem Format der Trainingsdaten entspricht validiert erfolgreich validiert werden kann.
+    loader_train = DataLoader("data/example_data/train.csv")
+    data_train = loader_train.load_data()
+    assert loader_train.validate_csv_format(data_train) == Messages.VALID_TRAINING
+
+    # Dieser Testfall überrüft, of eine CSV-Datei die dem Format der idealen Funktion entspricht validiert erfolgreich validiert werden kann.
+    loader_ideal = DataLoader("data/example_data/ideal.csv")
+    data_ideal = loader_ideal.load_data()
+    assert loader_ideal.validate_csv_format(data_ideal) == Messages.VALID_IDEAL
+
+    # Dieser Testfall überrüft, of eine CSV-Datei die dem Format der Testdaten entspricht validiert erfolgreich validiert werden kann.
+    loader_test = DataLoader("data/example_data/test.csv")
+    data_test = loader_test.load_data()
+    assert loader_test.validate_csv_format(data_test) == Messages.VALID_TEST
+    
+    # Dieser Testfall überprüft, den ValueError der geworfen werden soll, wenn eine CSV-Datei nicht das gewünschte Format hat.
+    with pytest.raises(ValueError) as exc_info:
+        loader_wrong = DataLoader("data/example_data/wrongformat.csv")
+        data_wrong = loader_wrong.load_data()
+        loader_wrong.validate_csv_format(data_wrong)
+    assert exc_info.value.args[0] == Messages.INVALID_CSV_FORMAT.name

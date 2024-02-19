@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from src.status_messages import Messages
 
 class DataLoader:
     ''' 
@@ -20,8 +21,8 @@ class DataLoader:
             # raised den FileNotFoundError mit eigener Nachricht.
             raise FileNotFoundError(f"Die Datei {file_path} konnte nicht gefunden werden")
 
-        # Sollte die Datei nicht auf .csv enden, dann wird ein TypeError geworfen.
-        elif not file_path[-4:] == ".csv":
+        # Sollte die Datei nicht auf .csv oder .CSV enden, dann wird ein TypeError geworfen.
+        elif not file_path[-4:].lower() == ".csv":
             # wirft den TypeError mit eigener Nachricht
             raise TypeError(f"Die Datei {file_path} ist nicht vom Typ .csv")
         else:
@@ -51,6 +52,7 @@ class DataLoader:
         Ist das Format nicht das der Beispieldatensätze, so wird ein ValueError mit eigener Nachricht übergeben.
         
         Methodenparameter:
+        - self
         - df: Dataframe, dass durch das Programm verwendet werden soll
         '''
 
@@ -60,5 +62,22 @@ class DataLoader:
             ['x', 'y1', 'y2', 'y3', 'y4'],  # Format der Trainingsdaten
             ['x'] + [f'y{i}' for i in range(1, 51)]  # Format der idealen Funktionen
         ]
-        if not any(df.columns.tolist() == valid_columns for valid_columns in valid_columns_lists):
-            raise ValueError("Die CSV-Datei hat nicht das richtige Format.")
+        # Aus dem Dataframe werden die Spalten als Listen mit den erlaubten Spalten verglichen.
+        # Listen, weil die Reihenfolge eine Rolle spielt.
+        df_columns = df.columns.tolist()
+    
+        # Überprüfung des Formates der Testdaten.
+        if df_columns == valid_columns_lists[0]:
+            return Messages.VALID_TEST
+        
+        # Überprüfung des Formates der Trainingsdaten.
+        elif df_columns == valid_columns_lists[1]:
+            return Messages.VALID_TRAINING
+        
+        # Überprüfung des Formates der idealen Funktionen.
+        elif df_columns == valid_columns_lists[2]:
+            return Messages.VALID_IDEAL
+        
+        # in allen anderen Fällen wird ein ValueError geworfen.
+        else:   
+            raise ValueError(Messages.INVALID_CSV_FORMAT.name)
