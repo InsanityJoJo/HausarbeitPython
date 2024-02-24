@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from src.status_messages import Messages
+import logging
 
 class DataLoader:
     ''' 
@@ -38,8 +39,13 @@ class DataLoader:
         Rückgabewert:
         - Dataframe aus den Daten der CSV-Datei
         '''
-        return pd.read_csv(self.file_path)
-
+        try:
+            df = pd.read_csv(self.file_path)
+            logging.info(Messages.FILE_LOADED.value.format(file_path=self.file_path))
+            return df
+        except Exception as e:
+            logging.error(Messages.ERROR_FILE_LOADED.value.format(file_path=self.file_path, error=e))
+            raise
     def validate_csv_format(self, df):
         '''
         Diese Methode ist für die Validierung des Formats der aus den CSVs erstellten Dataframes zuständig.

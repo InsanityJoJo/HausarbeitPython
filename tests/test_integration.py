@@ -5,6 +5,8 @@ from src.ideal_tbl import Ideal
 from src.base_tbl import Base
 from database.engine import engine
 from sqlalchemy.orm import sessionmaker
+import logging
+from src.status_messages import Messages
 
 
 @pytest.fixture(scope='module')
@@ -21,9 +23,15 @@ def db_session():
     session = Session()
     # Test
     yield session # Hier laufen die Tests
-    # Teardown
-    session.close()
-    Base.metadata.drop_all(engine) # Bereinige die Daten
+       # Teardown
+    # Versuch die Tabelle zu löschen und den Ausgangszustand wiederherzustellen:
+    try:
+        session.close()
+        Base.metadata.drop_all(engine)
+        logging.info(Messages.TABLE_DROPPED.value)
+    except Exception as e:
+        # Error Nachricht, wenn dies nicht klappt.
+        logging.error(Messages.ERROR_TABLE_DROPPED.value.format(e=e))
 
 def test_csv_loading_and_db_insertion(db_session):
     '''

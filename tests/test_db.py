@@ -4,6 +4,8 @@ from sqlalchemy.orm import sessionmaker
 from src.train_tbl import Train
 from src.base_tbl import Base
 from database.engine import engine
+import logging
+from src.status_messages import Messages
 
 # Setup der DB für den Test
 @pytest.fixture(scope="module")
@@ -22,8 +24,14 @@ def db_session():
     yield session  # Gibt die Kontrolle an den Test zurück
 
     # Teardown
-    session.close()
-    Base.metadata.drop_all(engine)
+    # Versuch die Tabelle zu löschen und den Ausgangszustand wiederherzustellen:
+    try:
+        session.close()
+        Base.metadata.drop_all(engine)
+        logging.info(Messages.TABLE_DROPPED.value)
+    except Exception as e:
+        # Error Nachricht, wenn dies nicht klappt.
+        logging.error(Messages.ERROR_TABLE_DROPPED.value.format(error=e))
 
 def test_db_insertion(db_session):
     '''

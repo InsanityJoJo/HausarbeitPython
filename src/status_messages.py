@@ -34,17 +34,21 @@ class Messages(Enum):
     
     # Logging Nachricht zur Information, wenn die Datei im DataLoader geladen wurde.
     FILE_LOADED = "Datei {file_path} wurde geladen."
+    
+    # Logging Nachricht zur Information, wenn die Datei im DataLoader geladen wurde.
+    ERROR_FILE_LOADED = "Datei {file_path} konnte nicht geladen werden: {error}."
 
     # Logging Nachricht, wenn die Daten an eine Tabelle angefügt wurden
     DATA_INSERTED = "Daten wurden erfolgreich in die Tabelle {table_name} eingefügt."
 
     # Logging Error, wenn ein Fehler beim Einfügen der Daten passiert ist
-    ERROR_DATA_INSERTED = "Fehler beim Einfügen der Daten in {__tablename__}: {e}"
+    ERROR_DATA_INSERTED = "Fehler beim Einfügen der Daten in {__tablename__}: {error}"
     
     # Logging Nachricht, wenn die Testdaten wieder gelöscht wurden. 
-    TABLE_DROPPED = "Tabelle {table_name} wurde im Testfall gelöscht."
+    TABLE_DROPPED = "Tabelle wurde im Testfall gelöscht."
 
-    
+    # Logging Error, wenn die Testdaten nicht gelöscht wurden
+    ERROR_TABLE_DROPPED = "Fehler beim Löschen der Tabelle der Testdaten: {error}"
     
     @staticmethod
     def file_not_found_msg(file_path):
