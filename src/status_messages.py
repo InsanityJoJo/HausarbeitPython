@@ -31,15 +31,20 @@ class Messages(Enum):
                 Für die idealen Funktionen sind die Spaten x, y1, ..., y50 erlaubt."  
     
     # Logging Nachrichten:
-    # Logging Info
+    
     # Logging Nachricht zur Information, wenn die Datei im DataLoader geladen wurde.
     FILE_LOADED = "Datei {file_path} wurde geladen."
 
     # Logging Nachricht, wenn die Daten an eine Tabelle angefügt wurden
     DATA_INSERTED = "Daten wurden erfolgreich in die Tabelle {table_name} eingefügt."
 
+    # Logging Error, wenn ein Fehler beim Einfügen der Daten passiert ist
+    ERROR_DATA_INSERTED = "Fehler beim Einfügen der Daten in {__tablename__}: {e}"
+    
     # Logging Nachricht, wenn die Testdaten wieder gelöscht wurden. 
     TABLE_DROPPED = "Tabelle {table_name} wurde im Testfall gelöscht."
+
+    
     
     @staticmethod
     def file_not_found_msg(file_path):
