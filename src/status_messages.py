@@ -30,11 +30,27 @@ class Messages(Enum):
             Für Trainingsdaten sind die Spaten x, y1, ..., y4 erlaubt.\
                 Für die idealen Funktionen sind die Spaten x, y1, ..., y50 erlaubt."  
     
+    # Logging Nachrichten:
+    # Logging Info
+    # Logging Nachricht zur Information, wenn die Datei im DataLoader geladen wurde.
+    FILE_LOADED = "Datei {file_path} wurde geladen."
+
+    # Logging Nachricht, wenn die Daten an eine Tabelle angefügt wurden
+    DATA_INSERTED = "Daten wurden erfolgreich in die Tabelle {table_name} eingefügt."
+
+    # Logging Nachricht, wenn die Testdaten wieder gelöscht wurden. 
+    TABLE_DROPPED = "Tabelle {table_name} wurde im Testfall gelöscht."
     
     @staticmethod
     def file_not_found_msg(file_path):
+        '''
+        Statische Methode zur Arbeit mit f-Strings der Fehler Nachricht.
+        '''
         return Messages.FILE_NOT_FOUND.value.format(file_path=file_path)
     
     @staticmethod
     def file_wrong_type_msg(file_path):
+        '''
+        Statische Methode zur Arbeit mit f-Strings der Fehler Nachricht.
+        '''
         return Messages.FILE_WRONG_TYPE.value.format(file_path=file_path)
