@@ -18,7 +18,7 @@ class Ideal(Base):
     add_df_to_tbl: Hinzüfügen von Daten aus einem Dataframe
      
     '''
-    __tablename__ = 'ideale_funktionen'
+    __tablename__ = 'Ideale_funktionen'
     id = Column(Integer, primary_key=True)
     x = Column(Float)
 

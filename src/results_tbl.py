@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Float, Integer
+from sqlalchemy import Column, Float, Integer, String
 from .base_tbl import Base
 from src.status_messages import Messages
 import logging
@@ -20,3 +20,6 @@ class Result(Base):
     '''
     __tablename__ = 'Ergebnisse'
     id = Column(Integer, primary_key=True)
+    y_train_col = Column(String)
+    best_ideal_col = Column(String)
+    min_mse = Column(Float)

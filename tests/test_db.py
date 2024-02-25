@@ -1,47 +1,14 @@
 import pytest
 import pandas as pd
-from sqlalchemy.orm import sessionmaker
 from src.train_tbl import Train
-from src.base_tbl import Base
-from database.engine import engine
-import logging
-from src.status_messages import Messages
-
-# Setup der DB für den Test
-@pytest.fixture(scope="module")
-def db_session():
-    '''
-    Diese Methode setzt die DB auf einen bekannten Zustand vor dem Test. - Setup
-    Der Test kann dann mit Testdaten ausgeführt werden. 
-    Nach dem Test wird die Kotrolle der Session an diese Methode zurückgegeben, 
-    anschließend wird der Ausgangstzustand wiederhergestellt. - Teardown
-    '''
-
-    # Datenbank wird vor den Test gesetzt- Setup
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    yield session  # Gibt die Kontrolle an den Test zurück
-
-    # Teardown
-    # Versuch die Tabelle zu löschen und den Ausgangszustand wiederherzustellen:
-    try:
-        session.close()
-        Base.metadata.drop_all(engine)
-        logging.info(Messages.TABLE_DROPPED.value)
-    except Exception as e:
-        # Error Nachricht, wenn dies nicht klappt.
-        logging.error(Messages.ERROR_TABLE_DROPPED.value.format(error=e))
 
 def test_db_insertion(db_session):
     '''
     Diese Methode testet das Hinzufühen von Daten an die db,
     inder Trainingsdatentabelle.
 
-    Methodenparameter:
-    - db_session: Testsession für diesen Test. pytest Fixure
-
-    
+    Um Wiederverwendbarkeit und Reggression zu gewährleisten wird
+    zum Setup und Teardown pytest fixure verwendet.
     '''
     # Testdaten 
     df_train_data = pd.DataFrame([{"x": 1, "y1": 0.313, "y2": 797, "y3": 0.4, "y4": 2}])

@@ -49,7 +49,15 @@ class Messages(Enum):
 
     # Logging Error, wenn die Testdaten nicht gelöscht wurden
     ERROR_TABLE_DROPPED = "Fehler beim Löschen der Tabelle der Testdaten: {error}"
+
+    # Logging Nachricht, wenn der Mean Squared Error erfolgreich berechnet wurde.
+    MSE_CALCULATED = "Berechnung MSE erfolgreich: {result}"
+
+    # Logging Error, wenn der Mean Squared Error nicht berechnet werden konnte.
+    ERROR_MSE_CALCULATED = "Die Berechung des MSE mit {actual} und {predicted} schlug fehl: {error}"
     
+    
+
     @staticmethod
     def file_not_found_msg(file_path):
         '''

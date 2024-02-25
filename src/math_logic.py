@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-
+import logging
+from src.status_messages import Messages
 
 class Mathematics:
     '''
@@ -25,9 +26,13 @@ class Mathematics:
         """
         # Subtrahieren actual - predicted
         # Quadrieren des Ergebnisses
-        # 
-        return ((actual - predicted) ** 2).mean()
-    
+        try: 
+            result = ((actual - predicted) ** 2).mean()
+            return result
+        except Exception as e:
+            logging.error(Messages.ERROR_MSE_CALCULATED.value.format(actual=actual, predicted=predicted, error=e))
+            raise
+
     @staticmethod
     def calculate_min_mse(train, ideal):
         """
@@ -49,10 +54,7 @@ class Mathematics:
 
             # Der Minimale MSE beginnt bei unendlich, damit dieser sicher nicht unter dem ersten errechneten MSE liegt.
             min_mse = np.inf
-
-            # Es kann noch keine Ideale Funktion zugeornet werden, daher None.
-            best_ideal_index = None
-            
+            best_ideal_col = None
             # hier wird über die y-Spalten im Ideal-Datensatz iterriert.
             # Auch hier wird die x-Spalte mit [1:] übersprungen.
             for y_ideal_col in ideal.columns[1:]:
@@ -65,6 +67,10 @@ class Mathematics:
                     best_ideal_col = y_ideal_col
             
             results.append({'y_train_col': y_train_col, 'best_ideal_col': best_ideal_col, 'min_mse': min_mse})
-        
-        return pd.DataFrame(results)
-
+        try:
+            results_df = pd.DataFrame(results)
+            logging.info(Messages.MSE_CALCULATED.value.format(result=results_df))
+            return results_df
+        except Exception as e:
+            logging.error(Messages.ERROR_MSE_CALCULATED.value.format(actual=train, predicted=ideal, error=e))
+            raise
