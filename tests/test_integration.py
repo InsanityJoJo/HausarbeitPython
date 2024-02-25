@@ -9,30 +9,6 @@ import logging
 from src.status_messages import Messages
 
 
-@pytest.fixture(scope='module')
-def db_session():
-    '''
-    Diese Methode ist für das Setup und Teardown der db 
-    für den Integrationstest zuständig.
-
-    '''
-
-    # Setup
-    Base.metadata.create_all(engine)  # Erstellen der Tabellen
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    # Test
-    yield session # Hier laufen die Tests
-       # Teardown
-    # Versuch die Tabelle zu löschen und den Ausgangszustand wiederherzustellen:
-    try:
-        session.close()
-        Base.metadata.drop_all(engine)
-        logging.info(Messages.TABLE_DROPPED.value)
-    except Exception as e:
-        # Error Nachricht, wenn dies nicht klappt.
-        logging.error(Messages.ERROR_TABLE_DROPPED.value.format(e=e))
-
 def test_csv_loading_and_db_insertion(db_session):
     '''
     In dieser Testmethode soll die Zusammenarbeit zwischen 
