@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import math
 import logging
 from src.status_messages import Messages
 
@@ -73,4 +74,19 @@ class Mathematics:
             return results_df
         except Exception as e:
             logging.error(Messages.ERROR_MSE_CALCULATED.value.format(actual=train, predicted=ideal, error=e))
+            raise
+
+    @staticmethod
+    def validate_selection(y_punkt, y_ideal):
+        '''
+        Diese Methode sorgt für die Berechung der Validierung der Selektion 
+        von Ausgewählten Idealen Funktionen mit einem Punkvergleich der Testdaten.
+        Punktvergleich (y_punkt-y_ideal)**2 < sqr(2)*y_punkt**2 
+        '''    
+        try:
+            result = (y_punkt-y_ideal)**2 < math.sqrt(2)*y_punkt**2
+            logging.info(Messages.VALIDATED_SELECTION.value)
+            return result
+        except Exception as e:
+            logging.error(Messages.ERROR_VALIDATED_SELECTION.value.format(error=e))
             raise

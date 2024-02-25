@@ -56,6 +56,11 @@ class Messages(Enum):
     # Logging Error, wenn der Mean Squared Error nicht berechnet werden konnte.
     ERROR_MSE_CALCULATED = "Die Berechung des MSE mit {actual} und {predicted} schlug fehl: {error}"
     
+    # Logging Nachricht, wenn die Selektion der Idealen Funktionen validiert wurde
+    VALIDATED_SELECTION = "Berechnung erfolgreich."
+
+    # Logging Error, wenn ein Fehler bei der Validierung der Selektion vorliegt.
+    ERROR_VALIDATED_SELECTION = "Fehler bei der Berechnung: {error}"
     
 
     @staticmethod
