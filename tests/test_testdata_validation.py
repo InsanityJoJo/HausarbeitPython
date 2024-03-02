@@ -1,14 +1,27 @@
 import pytest
-import logging
 import pandas as pd
-from src.test_tbl import DataTableTest
-from database.engine import engine
+from src.data_loading import DataLoader
+from src.math_logic import Mathematics
 
-def test_testdata_valid(db_session):
-    # Daten aus der Datenbank in ein Dataframe Landen
-    sql_query = db_session.query(DataTableTest).statement
-    test_df = pd.read_sql_query(sql_query, con=engine)
+def test_testdata_valid():
+
+    train_loader = DataLoader("data/example_data/train.csv")  # Loader für die train.csv
+    ideal_loader = DataLoader("data/example_data/ideal.csv")  # Loader für die ideal.csv
+    test_loader = DataLoader("data/example_data/test.csv")  # Loader für die test.csv
+
+    train_df = train_loader.load_data()  # Speichern der Trainingsdaten als Dataframe
+    ideal_df = ideal_loader.load_data()  # Speichern der Idealfunktionen als Dataframe
+    test_df = test_loader.load_data()  # Speichern der Testdaten als Dataframe
     
-    test_df.sort_values(by='x_punkt', ascending=False)
-    logging.info()
+    # Check ob das df Daten enthält.
+    assert train_df is not None
+    # Check ob das df Daten enthält.
+    assert ideal_df is not None
+    # Check ob das df Daten enthält.
     assert test_df is not None
+
+    mse_df = Mathematics.calculate_min_mse(train_df, ideal_df)
+
+    result_df = Mathematics.validate_dfs(mse_df, ideal_df, test_df)
+
+    assert result_df is not None

@@ -3,7 +3,7 @@ import pandas as pd
 from src.data_loading import DataLoader
 from src.ideal_tbl import Ideal
 from src.base_tbl import Base
-from src.results_tbl import Result
+from src.mse_results_tbl import Result
 from database.engine import engine
 from src.math_logic import Mathematics
 
