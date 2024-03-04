@@ -193,6 +193,7 @@ class Mathematics:
             # Aktualisiere die Werte für best_ideal und min_Abweichung für die aktuelle Zeile
             result_df.at[index, 'best_ideal'] = best_ideal
             result_df.at[index, 'min_Abweichung'] = min_deviation
+            result_df.sort_values('x', inplace=True)
         try:
             result_str = result_df.to_string()  # Logging Vorbereitung um beim Test das Ergebniss vollständig zu sehen.
             logging.info(f'Die Selektion wurde validiert: \n{result_str}')

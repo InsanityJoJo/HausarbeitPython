@@ -65,6 +65,7 @@ def test_load_data_mse_store_result(db_session):
     min_mse = Mathematics()
     result_df = min_mse.calculate_min_mse(train, ideal)
 
+
     # Check ob das df Daten enthält.
     assert result_df is not None
     # Speichern des results in der Result Tabelle
@@ -80,7 +81,10 @@ def test_load_data_mse_store_result(db_session):
     # Filtern, sodass nur die relevanten Spalten im DF enthalten sind
     df_results_filtered = result_df[columns_to_compare]
     inserted_data_df_filtered = inserted_data_df[columns_to_compare]
-    
+
+
+
     # Check ob der Inhalt übereinstimmt
     # Check ob der Inhalt der Spalte x, y1, bis y50 übereinstimmt.
     assert df_results_filtered.equals(inserted_data_df_filtered)
+
