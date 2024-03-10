@@ -54,6 +54,7 @@ class Mathematics:
         """
         # Subtrahieren actual - predicted
         # Quadrieren des Ergebnisses
+        # Duchschnittswert des sets
         try: 
             result = ((actual - predicted) ** 2).mean()
             return result

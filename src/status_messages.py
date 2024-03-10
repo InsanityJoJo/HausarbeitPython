@@ -62,7 +62,12 @@ class Messages(Enum):
     # Logging Error, wenn ein Fehler bei der Validierung der Selektion vorliegt.
     ERROR_VALIDATED_SELECTION = "Fehler bei der Berechnung: {error}"
     
+    # Logging Nachricht wenn due DB neu erstellt wurde-
+    DATABASE_CREATED = "Die Datenbank existiert nicht und wird erstellt an der Stelle {db_path}."
 
+    # Logging Nachricht wenn die DB bereits existiert.
+    DATABASE_EXISTS = "Verbindung zur bestehenden Datenbank {db_path} hergestellt."
+    
     @staticmethod
     def file_not_found_msg(file_path):
         '''

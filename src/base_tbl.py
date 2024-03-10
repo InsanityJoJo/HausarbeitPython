@@ -1,6 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase
 import logging
-from database.engine import engine
 from src.status_messages import Messages
 
 class Base(DeclarativeBase):
@@ -13,7 +12,7 @@ class Base(DeclarativeBase):
     '''
 
     @classmethod
-    def add_df_to_tbl(cls, df):
+    def add_df_to_tbl(cls, df, engine):
         '''
         Diese Methode fügt Daten aus einem DataFrame an die Tabelle an
         '''

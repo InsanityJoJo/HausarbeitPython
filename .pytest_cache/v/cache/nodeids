@@ -1,0 +1,15 @@
+[
+  "tests/test_db.py::test_db_insertion",
+  "tests/test_integration.py::test_csv_loading_and_db_insertion",
+  "tests/test_integration.py::test_load_data_mse_store_result",
+  "tests/test_loading.py::test_load_data",
+  "tests/test_loading.py::test_validate_csv_format",
+  "tests/test_mse.py::test_calculate_min_mse",
+  "tests/test_testdata_validation.py::test_testdata_valid",
+  "tests/test_visualisierung.py::test_connected_plot_train_data",
+  "tests/test_visualisierung.py::test_plot_ideal_funktions",
+  "tests/test_visualisierung.py::test_plot_mse_result",
+  "tests/test_visualisierung.py::test_plot_test_data",
+  "tests/test_visualisierung.py::test_plot_train_data",
+  "tests/test_visualisierung.py::test_plot_validation_results"
+]

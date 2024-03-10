@@ -1,8 +1,6 @@
 from sqlalchemy import Column, Float, Integer
 from .base_tbl import Base
-from database.engine import engine
-import logging
-from src.status_messages import Messages
+
 
 class Ideal(Base):
     '''

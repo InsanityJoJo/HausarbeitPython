@@ -2,7 +2,7 @@ from sqlalchemy import Column, Float, Integer, String
 from .base_tbl import Base
 from src.status_messages import Messages
 import logging
-from database.engine import engine
+
 
 
 class Result(Base):

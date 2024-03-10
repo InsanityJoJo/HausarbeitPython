@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 from src.train_tbl import Train
 
-def test_db_insertion(db_session):
+def test_db_insertion(db_session, engine_fixture):
     '''
     Diese Methode testet das Hinzufühen von Daten an die db,
     inder Trainingsdatentabelle.
@@ -12,7 +12,7 @@ def test_db_insertion(db_session):
     '''
     # Testdaten 
     df_train_data = pd.DataFrame([{"x": 1, "y1": 0.313, "y2": 797, "y3": 0.4, "y4": 2}])
-    Train.add_df_to_tbl(df_train_data)
+    Train.add_df_to_tbl(df_train_data, engine_fixture)
 
     # Überprüfen ob die Daten korrekt angefügt wurden
     inserted_data = db_session.query(Train).all()
