@@ -18,9 +18,9 @@ class Visualisierung:
     def __init__(self, show_plots = True):
         '''
         Konstruktor
-        Festlegen des Styles und der Farben.
-        Variable show_plots ob der Plot angezeigt werden soll. 
-        True anzeigen, False nicht anzeigen.
+        Festlegen des Styles als "darkgrind" und einheitlicher Farben aus der Liste.
+        Variable show_plots legt fest ob der Plot angezeigt werden soll. 
+        True bedeutet anzeigen, False nicht anzeigen.
         '''
         # Festlegen des Themas der Darstellung.
         sns.set_theme(style="darkgrid")
