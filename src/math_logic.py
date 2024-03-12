@@ -202,30 +202,3 @@ class Mathematics:
         except Exception as e:
             logging.error(Messages.ERROR_VALIDATED_SELECTION.value.format(error=e))
             raise
-
-@staticmethod
-def create_summary_df(validated_df):
-    """
-    Diese Methode erzeugt ein zusammenfassendes DataFrame aus den validierten Daten.
-
-    Methodenparameter:
-    - validated_df: 
-        DataFrame, das die validierten Testdaten enthält.
-    
-    Rückgabewert:
-    - summary_df: 
-        Neues DataFrame mit den Spalten X (Test Funktion), 
-        Y1 (Test Funktion), Delta Y (Abweichung), 
-        Nummer der Idealen Funktion.
-    """
-
-    # 'validated_df' enthält unter anderem die Spalten ['x', 'y', 'best_ideal', 'min_Abweichung']
-    # Diese sollen in das neue Dataframe integriert werden
-    # Erstellung eines neuen DataFrames mit den notwendigen Spalten
-    summary_df = validated_df[['x', 'y', 'min_Abweichung', 'best_ideal']].copy()
-
-    # Neues zusammenfassenden Dataframe mit den umbenannten Spalten.
-    summary_df.columns = ['X (Test Funktion)', 'Y1 (Test Funktion)', 'Delta Y (Abweichung)', 'Nummer der Idealen Funktion']
-
-    return summary_df          
-

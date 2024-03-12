@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Float, Integer
 from .base_tbl import Base
-
+from src.status_messages import Messages
+import logging
 
 class Ideal(Base):
     '''
@@ -18,11 +19,31 @@ class Ideal(Base):
     '''
     __tablename__ = 'Ideale_funktionen'
     id = Column(Integer, primary_key=True)
-    x = Column(Float)
+    x = Column(Float, name='X')
+
+    @classmethod
+    def add_df_to_tbl(cls, df, engine):
+        '''
+        Diese Methode überschreibt die der Oberklasse. Sie nennt die Spalten des Dataframes um,
+        so dass sie an die der Tabelle passen. Sie fügt die Daten dann an die Tabelle an. 
+        '''
+        # Umbenennen der Spalten im DataFrame entsprechend der Datenbanktabelle Train
+        # Erstellen eines Wörterbuchs für die Umbenennung der Spalten
+        rename_dict = {'x': 'X',} | {f'y{i}': f'Y{i} (Ideale Funktion)' for i in range(1, 51)}
+
+        # Anwenden der Umbenennung
+        df_renamed = df.rename(columns=rename_dict)
+
+        try:
+            df_renamed.to_sql(cls.__tablename__, con=engine, if_exists='append', index=False)
+            # Konfiguration der Logging Info-Nachrichten im positiven Fall
+            # logging.info(Messages.DATA_INSERTED.value.format(table_name=cls.__tablename__))
+
+        except Exception as e:
+            # Konfiguration der Logging Error- Nachrichten im negativen Fall
+            # logging.error(Messages.ERROR_DATA_INSERTED.value.format(table_name=cls.__tablename__, error=e))
+            raise
 
 # Füge dynamisch Spalten für y1 bis y50 hinzu
 for i in range(1, 51):
-    setattr(Ideal, f'y{i}', Column(Float))
-
-
-
+        setattr(Ideal, f'y{i}', Column(Float, name=f'Y{i} (Ideale Funktion)'))

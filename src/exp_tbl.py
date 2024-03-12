@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Float, Integer
 from .base_tbl import Base
+from src.status_messages import Messages
+import logging
 
 class Test(Base):
     '''
@@ -17,5 +19,26 @@ class Test(Base):
     '''
     __tablename__ = 'Test-Daten-Tabelle'
     id = Column(Integer, primary_key=True)
-    x_punkt = Column(Float)
-    y_punkt = Column(Float)
+    x = Column(Float)
+    y = Column(Float)
+    
+    @classmethod
+    def add_df_to_tbl(cls, df, engine):
+        '''
+        Diese Methode überschreibt die der Oberklasse. Sie nennt die Spalten des Dataframes um,
+        so dass sie an die der Tabelle passen. Sie fügt die Daten dann an die Tabelle an. 
+        '''
+        # Umbenennen der Spalten im DataFrame entsprechend der Datenbanktabelle Train
+        df_renamed = df.rename(columns={
+            'x': 'x_punkt',
+            'y': 'y_punkt' 
+        })
+        try:
+            df_renamed.to_sql(cls.__tablename__, con=engine, if_exists='append', index=False)
+            # Konfiguration der Logging Info-Nachrichten im positiven Fall
+            logging.info(Messages.DATA_INSERTED.value.format(table_name=cls.__tablename__))
+
+        except Exception as e:
+            # Konfiguration der Logging Error- Nachrichten im negativen Fall
+            logging.error(Messages.ERROR_DATA_INSERTED.value.format(table_name=cls.__tablename__, error=e))
+            raise

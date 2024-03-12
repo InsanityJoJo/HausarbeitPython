@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.orm import sessionmaker
 from .base_tbl import Base
+from .status_messages import Messages
+import logging
 
 
 class Summery(Base):
@@ -37,35 +39,37 @@ class Summery(Base):
                 ...
 
     '''
-    __tablename__ = 'Zusammenfassung'
-    id = Column(Integer, primary_key=True)  # Identifier
-    x_punkt = Column(Float)  # X-Koordinate Test
-    y_punkt = Column(Float)  # Y-Koordinate Test
-    abweichung = Column(Float)  # Abweichung von der idealen Funktion
-    y_Ideal = Column(String)  # Name der Idealen Funktion
     
+    __tablename__ = 'Zusammenfassung'
+    id = Column(Integer, primary_key=True)
+    x_punkt = Column(Float, name='X (Test Funktion)')
+    y_punkt = Column(Float, name='Y1 (Test Funktion)')
+    abweichung = Column(Float, name='Delta Y (Abweichung)')
+    y_Ideal = Column(String, name='Nummer der Idealen Funktion')
+
     @classmethod
     def add_df_to_tbl(cls, df, engine):
         '''
-        Diese Methode fügt ein Dataframe an die Tabelle an. Das Dataframe muss, 
-        wie oben beschrieben mindestens die Spalten  x, y, best_ideal, min_Abweichung enhalten
-        Methodenparameter:
-            - cls: Aufruf der Klasse selbst, da Klassenmethode
-            - df: Padas Dataframe, dass die Daten enthält die angefgt werden sollen
-            - engine: SQLite Datenbank in der die Tabelle angefügt werden soll
-        
-        
+        Diese Methode überschreibt die der Oberklasse. Sie erstellt ein neues 
+        DataFrame aus dem übergeben, da nicht alle Spalten benötigt werden.
+        Die Spalten werden nach den Anforderungen der Aufgabe umbenannt.
+        Sie fügt die Daten dann an die Tabelle an.
+         
         '''
-        # Umwandeln des DataFrames in das gewünschte Format und Einfügen in die DB
-        records = df.to_dict('records')  # Wandelt den DataFrame in eine Liste von Dictionaries um
-        for record in records:
-            insert_dict = {
-                'x_punkt': record['x'],
-                'y_punkt': record['y'],
-                'abweichung': record['min_Abweichung'],
-                'y_Ideal': record['best_ideal']
-            }
-            # Erstellen des Objekts für die Einfügung
-            obj = cls(**insert_dict)  # Entpacken der Werte des Dictionaries über den Konstuktor der Klasse obj
-            engine.session.add(obj)  # Anfügen von obj an die Tabelle
-        engine.session.commit()  # Änderungen in der Datenbank speichern
+    
+        # Auswahl der benötigten Spalten und Umbenennung entsprechend der Datenbanktabelle
+        df_to_insert = df[['x', 'y', 'min_Abweichung', 'best_ideal']].rename(columns={
+            'x': 'X (Test Funktion)',
+            'y': 'Y1 (Test Funktion)',
+            'min_Abweichung': 'Delta Y (Abweichung)',
+            'best_ideal': 'Nummer der Idealen Funktion',
+        })
+        try:
+            df_to_insert.to_sql(cls.__tablename__, con=engine, if_exists='append', index=False)
+            # Konfiguration der Logging Info-Nachrichten im positiven Fall
+            logging.info(Messages.DATA_INSERTED.value.format(table_name=cls.__tablename__))
+
+        except Exception as e:
+            # Konfiguration der Logging Error- Nachrichten im negativen Fall
+            logging.error(Messages.ERROR_DATA_INSERTED.value.format(table_name=cls.__tablename__, error=e))
+            raise
