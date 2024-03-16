@@ -12,6 +12,7 @@ from src.visualisation import Visualisierung
 import tkinter as tk
 from tkinter import filedialog
 import logging
+import time
 
 def select_file():
     root = tk.Tk()
@@ -24,7 +25,9 @@ def main():
     Dies ist die Hauptmethode für das Ausführen des Programms. Über User Input werden die 
     Parameter
     '''
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO)  # Setzt den Logging lvl auf Information
+    logging.info("Start des Programms.")  # Logging Info zum Start des Programms
+    start_time = time.time()  # Zeit zu beginn des Programms
     print("Programmstart")
     
     # Festlegen der csv Dateien durch User input
@@ -36,10 +39,12 @@ def main():
     test_data_path =  select_file()
     
     # Loader Instanzen je csv Datei
+    logging.info("Datenladen beginnt")
     train_loader = DataLoader(train_data_path)  # Loader für die train.csv
     ideal_loader = DataLoader(ideal_data_path)  # Loader für die ideal.csv
     test_loader = DataLoader(test_data_path)  # Loader für die test.csv
     
+
     # Laden der Daten als Dataframe
     train_df = train_loader.load_data()  # Trainingsdaten als Dataframe
     ideal_df = ideal_loader.load_data()  # Idealfunktionen als Dataframe
@@ -55,6 +60,7 @@ def main():
     result_df = Mathematics.validate_dfs(mse_df, ideal_df, test_df)
     print("Die Validierung der Selektion wurde durchgeführt")
 
+
     # Festlegen des Speicherorts der SQLite Datenbank durch User input
     print("Wählen sie die Datenbank")
     db_path = select_file()
@@ -62,7 +68,8 @@ def main():
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
-    
+
+
 
     try:
         # Erstellen der Tabellen und anfügend der geladenen Daten
@@ -84,12 +91,23 @@ def main():
         session.close()    
    
     # Optionale Visualisierung
+    visualize = input("Möchten die detailierte Visualisierung aller Programmphasen? (ja/nein): ")
+    if visualize.lower() == "ja":
+        print("Visualisierung wird durchgeführt...")
+        vis = Visualisierung(show_plots=True)
+        vis.plot_train_data(train_df)
+        vis.plot_ideal_funktions(ideal_df)
+        vis.plot_test_data(test_df)
+        vis.plot_mse_result(mse_df, train_df, ideal_df)
+        vis.plot_validation_results(result_df)    
     visualize = input("Möchten Sie die Ergebnisse visualisieren? (ja/nein): ")
     if visualize.lower() == "ja":
         print("Visualisierung wird durchgeführt...")
         vis = Visualisierung(show_plots=True)
         vis.plot_validation_results(result_df)
     
+    end_time = time.time()  # Zeit zum Ende des Programms
+    logging.info(f"Ende des Programms. Gesammtlaufzeit: {end_time - start_time:.2f} Sekunden")
     print("Programmende")
     
 if __name__ == "__main__":

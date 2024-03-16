@@ -19,8 +19,8 @@ class Test(Base):
     '''
     __tablename__ = 'Testdaten'
     id = Column(Integer, primary_key=True)
-    x = Column(Float)
-    y = Column(Float)
+    x_punkt = Column(Float)
+    y_punkt = Column(Float)
     
     @classmethod
     def add_df_to_tbl(cls, df, engine):
