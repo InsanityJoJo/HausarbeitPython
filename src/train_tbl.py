@@ -5,16 +5,15 @@ import logging
 
 class Train(Base):
     '''
-    Diese Klasse ist das modell für die Tabelle der Trainingsdaten in der DB
+    Diese Klasse ist das Modell für die Tabelle der Trainingsdaten in der DB
     Sie erbt von der Klasse Base
 
     Aufbau Tabelle:
-        Spalten: id, x, y1, ..., y4
+        Spalten: id, X, Y1 (Training Funktion), ..., Y4 (Training Funktion)
         Zeilen: befüllung durch Padas Dataframe
 
     Methoden:
-
-    add_df_to_tbl: Hinzüfügen von Daten aus einem Dataframe
+        add_df_to_tbl: Hinzüfügen von Daten aus einem Dataframe
      
     '''
     __tablename__ = 'Trainingsdaten'
@@ -28,8 +27,19 @@ class Train(Base):
     @classmethod
     def add_df_to_tbl(cls, df, engine):
         '''
-        Diese Methode überschreibt die der Oberklasse. Sie nennt die Spalten des Dataframes um,
-        so dass sie an die der Tabelle passen. Sie fügt die Daten dann an die Tabelle an. 
+        Diese Methode überschreibt die der Oberklasse. 
+        Sie nennt die Spalten des Dataframes um,
+        so dass sie an die der Tabelle passen. 
+        Sie fügt die Daten dann an die Tabelle an. 
+        Die Spaltenamen werden angepasst.
+        
+        Methondenparameter:
+        - df: Pandas Dataframe der Trainingsdaten
+        - engine: Die Verbindung zur Datenbank in der
+                  die Tabelle erstellt werden soll.
+
+        Rückgabewert:
+        - None (implizit), es werden Daten an die Tabelle angefügt. 
         '''
         # Umbenennen der Spalten im DataFrame entsprechend der Datenbanktabelle Train
         df_renamed = df.rename(columns={

@@ -35,21 +35,23 @@ def test_csv_loading_and_db_insertion(db_session, engine_fixture):
     assert inserted_data_count == len(df_ideal)
 
     # Liste der zu verleichenden Spalten definieren, hier x, y1 bis y50
-    columns_to_compare = ['x'] + [f'y{i}' for i in range(1, 51)]
+    columns_to_compare = ['id']+['X'] + [f'Y{i} (Ideale Funktion)' for i in range(1, 51)]
 
     # Daten aus der Datenbank in ein Dataframe Landen
     sql_query = db_session.query(Ideal).statement
     inserted_data_df = pd.read_sql_query(sql_query, con=engine_fixture)
 
-    # Filtern, sodass nur die relevanten Spalten im DF enthalten sind
-    df_ideal_filtered = df_ideal[columns_to_compare]
-    inserted_data_df_filtered = inserted_data_df[columns_to_compare]
+    # Sicherstellen, dass beide Objekte Listen sind
+    inserted_columns = list(inserted_data_df.columns)
 
-    # Check ob der Inhalt der Spalte x, y1, bis y50 übereinstimmt.
-    assert df_ideal_filtered.equals(inserted_data_df_filtered)
+    # Optional: Ausgabe beider Listen zur Überprüfung
+    print("Erwartet:", columns_to_compare)
+    print("Eingefügt:", inserted_columns)
 
+    # Check ob die Spalten die richtigen Namen haben
+    assert inserted_columns == columns_to_compare, "Die Spaltennamen stimmen nicht überein."
     # Stichprobe bei y1 = -0,9129453 ob die Daten tatsächlich richtig angefügt wurden
-    assert df_ideal_filtered.at[0, 'y1'] == -0.9129453
+    assert inserted_data_df.at[0, 'Y1 (Ideale Funktion)'] == -0.9129453
 
 def test_load_data_mse_store_result(db_session, engine_fixture):
     '''

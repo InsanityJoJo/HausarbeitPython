@@ -32,7 +32,7 @@ class DataLoader:
 
     def load_data(self):
         '''
-        Diese Methode ermöglicht das lesen der CSV-Datei.
+        Diese Methode ermöglicht das Lesen der CSV-Datei.
         Methodenparameter:
         - self
         
@@ -54,13 +54,17 @@ class DataLoader:
         Die erlaubten Spalten sind in diesen Sets hart einprogrammiert, da laut Aufgabenstellung nur solche Daten zu erwarten sind.
         
         Die Validierung ist optional, da das Programm auch mit anderen Formaten arbeiten könnte.
-        Wichtig ist nur, dass die x-Werte in der esten Spalte stehen.
+        Wichtig ist nur, dass die x-Werte in der ersten Spalte stehen.
 
         Ist das Format nicht das der Beispieldatensätze, so wird ein ValueError mit eigener Nachricht übergeben.
         
         Methodenparameter:
         - self
         - df: Dataframe, dass durch das Programm verwendet werden soll
+        
+        Rückgabewert:
+        - Nachricht für gültige Formate
+        - ValueError für ungültige Formate
         '''
 
         # Sets der erlaubten Spalten        

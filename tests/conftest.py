@@ -4,6 +4,9 @@ from src.base_tbl import Base
 from database.engine import get_engine
 import logging
 from src.status_messages import Messages
+import os
+
+
 
 @pytest.fixture(scope="module")
 def engine_fixture():

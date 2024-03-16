@@ -50,11 +50,19 @@ class Summery(Base):
     @classmethod
     def add_df_to_tbl(cls, df, engine):
         '''
-        Diese Methode überschreibt die der Oberklasse. Sie erstellt ein neues 
-        DataFrame aus dem übergeben, da nicht alle Spalten benötigt werden.
-        Die Spalten werden nach den Anforderungen der Aufgabe umbenannt.
-        Sie fügt die Daten dann an die Tabelle an.
-         
+        Diese Methode überschreibt die der Oberklasse. 
+        Sie nennt die Spalten des Dataframes um,
+        so dass sie an die der Tabelle passen. 
+        Sie fügt die Daten dann an die Tabelle an. 
+        Die Spaltenamen werden angepasst.
+        
+        Methondenparameter:
+        - df: Pandas Dataframe der validierten Selektion
+        - engine: Die Verbindung zur Datenbank in der
+                  die Tabelle erstellt werden soll.
+
+        Rückgabewert:
+        - None (implizit), es werden Daten an die Tabelle angefügt. 
         '''
     
         # Auswahl der benötigten Spalten und Umbenennung entsprechend der Datenbanktabelle

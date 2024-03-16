@@ -28,10 +28,6 @@ class Mathematics:
         nutzt dazu den absoluten Abstand und die Methode point_comparison. 
         Gibt ein Ergebnis Dataframe zurück.
 
-    - create_summary_df: 
-        Erzeugt aus dem Ergebnis Dataframe von validate_dfs 
-        eine Zusammenfassung für die Speicherung.
-        Gibt eine Ergebnis Dataframe zurück.
     '''
 
     def __init__(self):

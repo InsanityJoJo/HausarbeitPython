@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+import os
 from scipy.integrate import simps
 
 class Visualisierung:
@@ -15,12 +16,15 @@ class Visualisierung:
     - plot_mse_result: Erzeugt den Plot für das Ergebnis der Mean-Squared Error Nachricht.
     - plot_validation_results: Erzeugt den Plot für das Ergebnis der zugeordneten Testdaten. 
     '''
-    def __init__(self, show_plots = True):
+    def __init__(self, show_plots = False):
         '''
         Konstruktor
         Festlegen des Styles als "darkgrind" und einheitlicher Farben aus der Liste.
         Variable show_plots legt fest ob der Plot angezeigt werden soll. 
         True bedeutet anzeigen, False nicht anzeigen.
+        Für die Tests sollen manchmal keine Plots angezeit werden,
+    
+
         '''
         # Festlegen des Themas der Darstellung.
         sns.set_theme(style="darkgrid")
@@ -29,7 +33,7 @@ class Visualisierung:
         self.show_plots = show_plots
         
 
-    def plot_train_data(self, df, x_col):
+    def plot_train_data(self, df):
         '''
         Diese Methode visualisiert die Trainingsdaten.
         Sie erzeugt zwei Übersichtsplots (einen Scatterplot, einen Linienplot) 
@@ -44,7 +48,6 @@ class Visualisierung:
 
         Methodenparameter:
             - df: Pandas Dataframe der Trainingsdaten Aufbau Spalten: x, y1, y2, y3, y4
-            - x_col: Übergabe, welche Spalte als X-Achse dient
 
         Rückgabewert:
             - None implizit, da hier nur Plots erzuegt werden            
@@ -62,7 +65,7 @@ class Visualisierung:
         # Durch die vier Trainingsfunktionen iterrieren und zusammen als seaborn scatterplot darstellen.
         for i, col in enumerate(['y1', 'y2', 'y3', 'y4']):
             sns.scatterplot(data=df,  # Auswahl des Dataframes
-                             x=x_col,  # Auswahl der X-Werte 
+                             x='x',  # Auswahl der X-Werte 
                               y=col,  # Auswahl der Y-Werte, hier jeweils für alle Funktionen neu gezeichnet
                                ax=axes[0, 0],  # Auswahl des Darstellungortes im Grid
                                 label=col,  # Hinzufügen der Funktion zur Legende
@@ -78,7 +81,7 @@ class Visualisierung:
         # Durch die vier Trainingsfunktionen iterrieren und getrennte als einzelen scatterplots darstellen.
         for i, col in enumerate(['y1', 'y2', 'y3', 'y4'], start=1):  # Beginnt mit der 2. Spalte, da die erste x ist.
             sns.scatterplot(data=df,  # Auswahl des Dataframes
-                             x=x_col,  # Auswahl der X-Werte
+                             x='x',  # Auswahl der X-Werte
                                y=col,  # Auswahl der Y-Werte
                                  ax=axes[0, i],  # Auswahl des Darstellungortes im Grid
                                    color=self.colors[i-1]   # Auswahl der Farbe für die Funktion, i-1 weil start=1
@@ -95,7 +98,7 @@ class Visualisierung:
                 
         # Durch die vier Trainingsfunktionen iterrieren und zusammen als Linienplot darstellen.                
         for i, col in enumerate(['y1', 'y2', 'y3', 'y4']):
-            axes[1, 0].plot(df[x_col],  # Auswahl der X-Werte
+            axes[1, 0].plot(df['x'],  # Auswahl der X-Werte
                              df[col],  # Auswahl der Y-Werte
                                label=col,  # Funktion in die Legende einfügen
                                  color=self.colors[i])  # Farbe der Funktion auswählen
@@ -108,7 +111,7 @@ class Visualisierung:
 
         # Durch die vier Trainingsfunktionen iterrieren und als Lininenplots darstellen.
         for i, col in enumerate(['y1', 'y2', 'y3', 'y4'], start=1):  # Beginnt mit der 2. Spalte, da die erste x ist.
-            axes[1, i].plot(df[x_col], df[col], color=self.colors[i-1])  # Auswahl für X-Werte, Y-Werte, Farbe
+            axes[1, i].plot(df['x'], df[col], color=self.colors[i-1])  # Auswahl für X-Werte, Y-Werte, Farbe
             axes[1, i].set_title(f'Detailansicht {col} (Linien)')  # Titel für den jeweiligen Plot festlegen
             
             # Anpassen des Y-Wertebereichs für y3 für eine aussagekräftige Darstellung
@@ -119,7 +122,7 @@ class Visualisierung:
         if self.show_plots:
             plt.show()  # Plotten der Diagramme
 
-    def plot_ideal_funktions(self, df, x_col):
+    def plot_ideal_funktions(self, df):
         '''
         Diese Methode visualisiert die Idealen Funktionen.
         Sie erzeugt sechs Übersichtsplots mit geclusterten Funktionen. Die Gruppierung der Funktionen
@@ -140,7 +143,7 @@ class Visualisierung:
 
         Methodenparameter:
             - df: Pandas Dataframe der Idealen Funktionen, Aufbau Spalten: x, y1, ..., y50
-            - x_col: Übergabe, welche Spalte als X-Achse dient
+
 
         Rückgabewert:
             - None implizit, da hier nur Plots erzuegt werden            
@@ -179,8 +182,8 @@ class Visualisierung:
             
             # Erstellen eines neuen DataFrames 'cluster_df' für das aktuelle Cluster.
             
-            cluster_df = df[[x_col] + cluster_functions].melt(  # Transformation des DataFrames von einem breiten Format (eine Spalte pro Funktion) zu einem langen Format
-                id_vars=[x_col],  # ID-Variable
+            cluster_df = df[['x'] + cluster_functions].melt(  # Transformation des DataFrames von einem breiten Format (eine Spalte pro Funktion) zu einem langen Format
+                id_vars=['x'],  # ID-Variable
                   var_name='Variable',  # umformen Variable
                     value_name='Wert'  # umformen Wert
                     )
@@ -190,7 +193,7 @@ class Visualisierung:
             
             # Erstelle einen Lineplot für das aktuelle Cluster.
             sns.lineplot(data=cluster_df,  # Dataframe, der visualisert wird
-                          x=x_col,  # X-Achse 
+                          x='x',  # X-Achse 
                            y='Wert',  # Y-Achse
                              hue='Variable',  # Linien
                                ax=ax, # Subplot
@@ -216,22 +219,21 @@ class Visualisierung:
         if self.show_plots:
             plt.show()  # Plotten der Diagramme
 
-    def plot_test_data(self, df, x_col):
+    def plot_test_data(self, df):
         '''
         Diese Methode visualisiert die Testdaten.
         Die Visualisierung ist optional. Die Darstellung ist ein scatterplot. 
         Methodenparameter:
             - df: Pandas Dataframe der Testdaten, Aufbau Spalten: x, y
-            - x_col: Übergabe, welche Spalte als X-Achse dient
 
         Rückgabewert:
             - None implizit, da hier nur Plots erzuegt werden  
         '''        
         # Umschmelzen des DataFrames in ein langes Format
-        df_long = pd.melt(df, id_vars=[x_col], var_name='Variable', value_name='Wert')
+        df_long = pd.melt(df, id_vars=['x'], var_name='Variable', value_name='Wert')
         
         plt.figure(figsize=(25, 10))
-        sns.scatterplot(data=df_long, x=x_col, y='Wert', hue='Variable')
+        sns.scatterplot(data=df_long, x='x', y='Wert', hue='Variable')
         plt.title("Visualisierung aller Testdaten")
         if self.show_plots:
             plt.show()  # Plott des Diagrammes

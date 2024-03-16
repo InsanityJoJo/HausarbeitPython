@@ -14,7 +14,15 @@ class Base(DeclarativeBase):
     @classmethod
     def add_df_to_tbl(cls, df, engine):
         '''
-        Diese Methode fügt Daten aus einem DataFrame an die Tabelle an
+        Diese Methode fügt Daten aus einem DataFrame an die Tabelle an.
+        
+        Methodenparameter
+        - df: Padas Dataframe, dass angefügt werden soll
+        - engine: Die Verbindung zur Datenbank in der
+                  die Tabelle erstellt werden soll.
+
+        Rückgabewert:
+        - None (implizit), es werden Daten an die Tabelle angefügt. 
         '''
         try:
             df.to_sql(cls.__tablename__, con=engine, if_exists='append', index=False)

@@ -17,7 +17,7 @@ class Test(Base):
     add_df_to_tbl: Hinzüfügen von Daten aus einem Dataframe
      
     '''
-    __tablename__ = 'Test-Daten-Tabelle'
+    __tablename__ = 'Testdaten'
     id = Column(Integer, primary_key=True)
     x = Column(Float)
     y = Column(Float)
@@ -25,8 +25,19 @@ class Test(Base):
     @classmethod
     def add_df_to_tbl(cls, df, engine):
         '''
-        Diese Methode überschreibt die der Oberklasse. Sie nennt die Spalten des Dataframes um,
-        so dass sie an die der Tabelle passen. Sie fügt die Daten dann an die Tabelle an. 
+        Diese Methode überschreibt die der Oberklasse. 
+        Sie nennt die Spalten des Dataframes um,
+        so dass sie an die der Tabelle passen. 
+        Sie fügt die Daten dann an die Tabelle an. 
+        Die Spaltenamen werden angepasst.
+        
+        Methondenparameter:
+        - df: Pandas Dataframe der Testdaten
+        - engine: Die Verbindung zur Datenbank in der
+                  die Tabelle erstellt werden soll.
+
+        Rückgabewert:
+        - None (implizit), es werden Daten an die Tabelle angefügt. 
         '''
         # Umbenennen der Spalten im DataFrame entsprechend der Datenbanktabelle Train
         df_renamed = df.rename(columns={

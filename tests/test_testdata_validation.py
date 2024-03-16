@@ -16,21 +16,21 @@ def test_testdata_valid():
     
     # Check ob das df Daten enthält.
     assert train_df is not None
-    visualisierung = Visualisierung(show_plots = False)
-    visualisierung.plot_train_data(train_df, 'x')
+    visualisierung = Visualisierung()
+    visualisierung.plot_train_data(train_df)
     
     # Check ob das df Daten enthält.
     assert ideal_df is not None
-    visualisierung = Visualisierung(show_plots = False)
-    visualisierung.plot_ideal_funktions(ideal_df, 'x')
+    visualisierung = Visualisierung()
+    visualisierung.plot_ideal_funktions(ideal_df)
     
     # Check ob das df Daten enthält.
     assert test_df is not None
-    visualisierung = Visualisierung(show_plots = False)
-    visualisierung.plot_test_data(test_df, 'x')
+    visualisierung = Visualisierung()
+    visualisierung.plot_test_data(test_df)
 
     mse_df = Mathematics.calculate_min_mse(train_df, ideal_df)
-    visualisierung = Visualisierung(show_plots = False)
+    visualisierung = Visualisierung()
     visualisierung.plot_mse_result(mse_df, train_df, ideal_df)
     assert mse_df is not None
 
@@ -50,7 +50,7 @@ def test_testdata_valid():
     assert (result_df['min_Abweichung'] >= 0).all(), "Negative Werte in 'min_Abweichung' gefunden"
 
 
-    visualisierung2 = Visualisierung(show_plots=False)
+    visualisierung2 = Visualisierung()
     visualisierung2.plot_validation_results(result_df)
     assert result_df is not None
     

@@ -14,7 +14,7 @@ def test_plot_train_data():
     
     # Aufruf der Visualiserung und der Methode zum Plotten
     visualisierung = Visualisierung()
-    visualisierung.plot_train_data(train_df, 'x')
+    visualisierung.plot_train_data(train_df)
 
     assert True
 
@@ -28,7 +28,7 @@ def test_plot_ideal_funktions():
     
     # Aufruf der Visualiserung und der Methode zum Plotten
     visualisierung = Visualisierung()
-    visualisierung.plot_ideal_funktions(ideal_df, 'x')
+    visualisierung.plot_ideal_funktions(ideal_df)
 
     assert True
 
@@ -42,7 +42,7 @@ def test_plot_test_data():
     
     # Aufruf der Visualiserung und der Methode zum Plotten
     visualisierung = Visualisierung()
-    visualisierung.plot_test_data(test_df, 'x')
+    visualisierung.plot_test_data(test_df)
 
     assert True
 
