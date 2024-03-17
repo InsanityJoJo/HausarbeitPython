@@ -1,9 +1,9 @@
 import pytest
 import pandas as pd
 from src.data_loading import DataLoader
-from src.ideal_tbl import Ideal
-from src.base_tbl import Base
-from src.mse_results_tbl import Result
+from src.db_tables.ideal_tbl import Ideal
+from src.db_tables.base_tbl import Base
+from src.db_tables.mse_results_tbl import Result
 from database.engine import get_engine
 from src.math_logic import Mathematics
 

@@ -22,7 +22,7 @@ class Visualisierung:
         Festlegen des Styles als "darkgrind" und einheitlicher Farben aus der Liste.
         Variable show_plots legt fest ob der Plot angezeigt werden soll. 
         True bedeutet anzeigen, False nicht anzeigen.
-        Für die Tests sollen manchmal keine Plots angezeit werden,
+        Default = False, wegen Tests und implemnetierung von main.py
     
 
         '''
@@ -30,6 +30,7 @@ class Visualisierung:
         sns.set_theme(style="darkgrid")
         # Festlegen der Farbpalette für die jeweiligen Funktionen
         self.colors = ['blue', 'orange', 'green', 'red']
+        # Anzeigen der Plots
         self.show_plots = show_plots
         
 
@@ -127,9 +128,9 @@ class Visualisierung:
     def plot_ideal_funktions(self, df):
         '''
         Diese Methode visualisiert die Idealen Funktionen.
-        Sie erzeugt sechs Übersichtsplots mit geclusterten Funktionen. Die Gruppierung der Funktionen
+        Sie erzeugt 9 Übersichtsplots mit geclusterten Funktionen. Die Gruppierung der Funktionen
         ist nötig, da sie sehr unterschiedliche y-Wertebereiche, Formen, Maxima enthalten.
-        Der Übersichtlichkeit sollen die 50 Funktionen in 9 Plots aufgeteilt werden
+        Der Übersichtlichkeit wegen, sollen die 50 Funktionen in 9 Plots aufgeteilt werden
         Die Cluster werden nach der Fläche unter Kurve(AUC - Area under Curve) erstellt,
         um ähnliche Wertebereiche so zu gruppieren.
         Die Darstellugn der idealen Funktionen dient der grafischen Übersicht über die Daten.
@@ -214,7 +215,8 @@ class Visualisierung:
             # um den sichtbaren Bereich der y-Achse dynamisch anzupassen.
             y_min, y_max = cluster_df['Wert'].min(), cluster_df['Wert'].max()
             
-            # Füge einen Puffer von 10% zum Min- und Max-Wert hinzu, um den Plot visuell ansprechender zu gestalten.
+            # Puffer von 10% zum Min- und Max-Wert hinzu, 
+            # um den Plot visuell ansprechender zu gestalten.
             puffer = (y_max - y_min) * 0.1
             ax.set_ylim([y_min - puffer, y_max + puffer])
             
@@ -246,7 +248,8 @@ class Visualisierung:
                              color = 'blue',  # Farbe festlegen
                              )
         plt.title("Visualisierung aller Testdaten")  # Titel für den Plotfestlegen
-        plt.legend(['Testdatenpunkt'], title='Legende')  # Legende anzeigen
+        plt.xlabel("X-Wert")
+        plt.ylabel("Y-Wert")
         if self.show_plots:  # Wenn show_plots True, dass
             plt.show()  # plot des Diagrammes
 

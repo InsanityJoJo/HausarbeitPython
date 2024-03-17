@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.orm import sessionmaker
 from .base_tbl import Base
-from .status_messages import Messages
+from ..status_messages import Messages
 import logging
 
 

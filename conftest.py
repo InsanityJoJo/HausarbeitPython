@@ -1,6 +1,6 @@
 import pytest
 from sqlalchemy.orm import sessionmaker
-from src.base_tbl import Base
+from src.db_tables.base_tbl import Base
 from database.engine import get_engine
 import logging
 from src.status_messages import Messages

@@ -6,10 +6,12 @@ from src.status_messages import Messages
 
 def get_engine(db_path, echo=True):
     '''
-    Diese Methode erstellt die Datenbank. Der Speicherort der DB wird durch den User festgelegt.
+    Diese Methode erstellt die Datenbank. 
+    Der Speicherort der DB wird durch den User festgelegt.
 
     Methodenparameter:
-        - db_path: Pfad an dem die BD erstellt oder mit der verbunden werden soll
+        - db_path: Pfad an dem die BD erstellt oder 
+                    mit der verbunden werden soll
 
     Rückgabewert:
         - engine: Gibt die Datenbank zurück.      

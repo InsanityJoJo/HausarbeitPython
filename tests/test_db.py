@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from src.train_tbl import Train
+from src.db_tables.train_tbl import Train
 
 def test_db_insertion(db_session, engine_fixture):
     '''

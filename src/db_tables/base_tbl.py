@@ -5,10 +5,13 @@ from src.status_messages import Messages
 class Base(DeclarativeBase):
     '''
     Diese Klasse ist die Oberklasse der Tabellen Klassen Ideal in ideal_tbl.py, 
-    Train in train_tbl.py, Test in test_tbl.py, Results in results_tbl.py.
+    Train in train_tbl.py, Test in exp_tbl.py, Results in results_tbl.py.
 
     In dieser Klasse wird die Funktionalität definniert ein pandas Dataframe
-    an eine Tabelle anzufügen. 
+    an eine Tabelle anzufügen.
+
+    Methoden
+    - add_df_to_tbl: Anfügen eines Padas Dataframe an die Tabelle
     '''
 
     @classmethod
