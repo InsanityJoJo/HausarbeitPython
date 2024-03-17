@@ -6,7 +6,8 @@ from src.status_messages import Messages
 
 class Mathematics:
     '''
-    Diese Klasse enhält alle mathematischen und logischen Operationen für das Projekt.
+    Diese Klasse enhält alle mathematischen und 
+    logischen Operationen für das Projekt.
     Diese sind in statischen Methoden implementiert.
 
     Methoden:
@@ -19,13 +20,15 @@ class Mathematics:
         gibt ein Ergebnis-Dataframe zurück.
     
     - point_comparison: 
-        Stellt fest ob zwei Punkte um mehr als Facktor von sqrt(2) auseinander liegen,
+        Stellt fest ob zwei Punkte um mehr als 
+        Facktor von sqrt(2), Wurzel aus 2 auseinander liegen,
         gibt ein boolschen Wert als Ergebnis zurück.
 
     - validate_dfs: 
         Validiert die Selektion der idealen Funktionen mit Testdaten.
-        Vergleich die Testdaten mit den durch das Training erhaltentenen vier Idealen Funktionen,
-        nutzt dazu den absoluten Abstand und die Methode point_comparison. 
+        Vergleich die Testdaten mit den, durch das Training, 
+        erhaltentenen vier Idealen Funktionen, nutzt dazu den 
+        absoluten Abstand und die Methode point_comparison. 
         Gibt ein Ergebnis Dataframe zurück.
 
     '''
@@ -34,15 +37,15 @@ class Mathematics:
         '''Konstruktor'''
         pass
         
-    
-    @staticmethod  # statische Methode da die Funktion der mse berechung isoliert ausgeführt wird.
+    # statische Methode da die Funktion der MSE-Berechnung
+    # isoliert ausgeführt wird.
+    @staticmethod  
     def calculate_mse(actual, predicted):
         """
         Berechnet den Mean Squared Error
         
         Methodenparameter:
         - actual: int oder float, tatsachlicher Wert
-        
         - predicted: int oder float, voraussichtlicher Wert
         
         Rückgabewert:
@@ -63,6 +66,8 @@ class Mathematics:
         """
         Vergleicht Trainingsdaten mit idealen Daten
         und findet die beste Übereinstimmung basierend auf dem MSE.
+        Die Dataframes werden durch die Klasse DataLoader geladen
+        und validiert.
 
         Übergabeparameter:
         train: Dataframe aus Trainingsdaten
@@ -78,7 +83,8 @@ class Mathematics:
         # die x-Spalte wird durch [1:] übersprungen
         for y_train_col in train.columns[1:]:
 
-            # Der Minimale MSE beginnt bei unendlich, damit dieser sicher nicht unter dem ersten errechneten MSE liegt.
+            # Der Minimale MSE beginnt bei unendlich, 
+            # damit dieser sicher nicht unter dem ersten errechneten MSE liegt.
             min_mse = np.inf
             best_ideal_col = None
             # hier wird über die y-Spalten im Ideal-Datensatz iterriert.
@@ -125,16 +131,17 @@ class Mathematics:
     @staticmethod
     def validate_dfs(mse_df, ideal_df, test_df):
         """
-        Diese Methode validiert die Selektion der Idealen Funktionen mit den Testdaten.
+        Diese Methode validiert die Selektion 
+        der Idealen Funktionen mit den Testdaten.
         Sie erzeugt ein DataFrame aus den validierten Daten.
 
         Methodenparameter:
-        - mse_df: DataFrame, Ergebniss von calculate_min_mse() generiert wird
+        - mse_df: DataFrame, Ergebnis von calculate_min_mse()
         - ideal_df: DataFrame der idealen Funktionen
         - test_df: DataFrame der Testdaten
 
         Rückgabewert:
-        - result_df: Neues DataFrame mit den Spalten 
+        - result_df: Neues DataFrame mit den Spalten: 
             x, y, y_ideal1, y_ideal2, y_ideal3, y_ideal4, best_ideal, min_Abweichung
         """
         logging.info(
@@ -187,12 +194,14 @@ class Mathematics:
                     if islessthanfactor2 == True:
                         best_ideal = ideal_name  # Wenn erfüllt, dann ideale Funktion zuweisen.
                     
-            # Aktualisiere die Werte für best_ideal und min_Abweichung für die aktuelle Zeile
+            # Aktualisiere die Werte für best_ideal 
+            # und min_Abweichung für die aktuelle Zeile
             result_df.at[index, 'best_ideal'] = best_ideal
             result_df.at[index, 'min_Abweichung'] = min_deviation
             result_df.sort_values('x', inplace=True)
         try:
-            result_str = result_df.to_string()  # Logging Vorbereitung um beim Test das Ergebniss vollständig zu sehen.
+            # Logging Vorbereitung um beim Test das Ergebniss vollständig zu sehen.
+            result_str = result_df.to_string()  
             logging.info(f'Die Selektion wurde validiert: \n{result_str}')
             return result_df
         except Exception as e:
