@@ -11,15 +11,35 @@ from src.math_logic import Mathematics
 from src.visualisation import Visualisierung
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import messagebox
 import logging
 import time
 
-def select_file():
-    root = tk.Tk()
-    root.withdraw()  # keine Gui Fenster, daher direkt wieder geschlossen
-    file_path = filedialog.askopenfilename()  # Öffnet den Dialig zur Dateiauswahl
+def select_file(prompt_message):
+    root = tk.Tk()  # Erstellen eines Fensterns
+    root.withdraw()  # schließen des Fenster, nur Funktion benötigt.
+    file_path = filedialog.askopenfilename(title=prompt_message)  # Öffnet den Dialig zur Dateiauswahl
+    if not file_path:  # Falls kein Dateipfad ausgewählt wurde
+        print("Keine Datei ausgewählt. Das Programm wird beendet.")
+        exit()  # Beendet das Programm
     return file_path
- 
+
+def ask_user(title, question):
+    root = tk.Tk()  # Erstellen eines Fensterns
+    root.withdraw()  # schließen des Fenster, nur Funktion benötigt.
+
+    # Diealogfenster mit Ja/Nein Optionen
+    response = messagebox.askyesno(title, question)
+
+    # Gibt True zurück, wenn 'Ja' ausgewählt wurde, sonst False
+    return response
+
+def end_message(title, info):
+    root = tk.Tk()  # Erstellen eines Fensterns
+    root.withdraw()  # schließen des Fenster, nur Funktion benötigt.
+    # Informationen am Ende des Programms
+    messagebox.showinfo(title, info)
+
 def main():
     '''
     Dies ist die Hauptmethode für das Ausführen des Programms. Über User Input werden die 
@@ -31,12 +51,12 @@ def main():
     print("Programmstart")
     
     # Festlegen der csv Dateien durch User input
-    print("Wählen sie die Trainingsdaten. ")
-    train_data_path = select_file()
-    print("Wählen sie die Daten der idealen Funktionen. ")
-    ideal_data_path = select_file()
-    print("Wählen sie die Testdaten. ")
-    test_data_path =  select_file()
+    print("Wählen sie die Trainingsdaten.")
+    train_data_path = select_file("Auswahl der Trainingsdaten.")
+    print("Wählen sie die Daten der idealen Funktionen.")
+    ideal_data_path = select_file("Auswahl der idealen Funktionen.")
+    print("Wählen sie die Testdaten.")
+    test_data_path =  select_file("Auswahl der Testdaten.")
     
     # Loader Instanzen je csv Datei
     logging.info("Datenladen beginnt")
@@ -63,7 +83,7 @@ def main():
 
     # Festlegen des Speicherorts der SQLite Datenbank durch User input
     print("Wählen sie die Datenbank")
-    db_path = select_file()
+    db_path = select_file("Wählen sie die Datenbank")
     engine = get_engine(db_path)
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
@@ -91,8 +111,7 @@ def main():
         session.close()    
    
     # Optionale Visualisierung
-    visualize = input("Möchten die detailierte Visualisierung aller Programmphasen? (ja/nein): ")
-    if visualize.lower() == "ja":
+    if ask_user("Visualisierung", "Möchten Sie eine detailierte Visualisierung aller Programmphasen?"):
         print("Visualisierung wird durchgeführt...")
         vis = Visualisierung(show_plots=True)
         vis.plot_train_data(train_df)
@@ -100,12 +119,13 @@ def main():
         vis.plot_test_data(test_df)
         vis.plot_mse_result(mse_df, train_df, ideal_df)
         vis.plot_validation_results(result_df)    
-    visualize = input("Möchten Sie die Ergebnisse visualisieren? (ja/nein): ")
-    if visualize.lower() == "ja":
+    
+    elif ask_user("Visualisierung der Ergebnisse","Möchten Sie die Ergebnisse visualisieren?"):
         print("Visualisierung wird durchgeführt...")
         vis = Visualisierung(show_plots=True)
         vis.plot_validation_results(result_df)
     
+    end_message("Programmende", f"Die Erbenisse sind gespeichert in:\n{db_path}")
     end_time = time.time()  # Zeit zum Ende des Programms
     logging.info(f"Ende des Programms. Gesammtlaufzeit: {end_time - start_time:.2f} Sekunden")
     print("Programmende")

@@ -41,7 +41,7 @@ def test_plot_test_data():
     test_df = data_loader.load_data()
     
     # Aufruf der Visualiserung und der Methode zum Plotten
-    visualisierung = Visualisierung()
+    visualisierung = Visualisierung(show_plots=True)
     visualisierung.plot_test_data(test_df)
 
     assert True
@@ -79,5 +79,5 @@ def test_plot_validation_results():
     result_df = Mathematics.validate_dfs(mse_df, ideal_df, test_df)
 
     # Visualisierung 
-    visualisierung = Visualisierung()
+    visualisierung = Visualisierung(show_plots=True)
     visualisierung.plot_validation_results(result_df)

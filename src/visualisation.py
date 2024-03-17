@@ -58,6 +58,8 @@ class Visualisierung:
                                   5,  # 5 Spalten
                                     figsize=(25, 8)  # Darstellungsgröße
                                     )  
+        # Titel des Fenster festlegen
+        fig.canvas.manager.set_window_title('Visualisierung der Trainingsdaten')
 
         # [0,0] Erste Zeile, erste Spalte: 
         # Übersichtsplot mit allen Daten geplottet als Punkte
@@ -173,7 +175,9 @@ class Visualisierung:
 
         # Erstellen der 9 Subplots (3x3)
         fig, axes = plt.subplots(3, 3, figsize=(25, 12), sharex=True)
-        
+        # Titel des Fenster festlegen
+        fig.canvas.manager.set_window_title('Visualisierung der Idealen Funktionen')
+
         for i in range(9):
             
             # Erstellen eine Liste von Funktionen, die zum aktuellen Cluster 'i' gehören.
@@ -232,11 +236,19 @@ class Visualisierung:
         # Umschmelzen des DataFrames in ein langes Format
         df_long = pd.melt(df, id_vars=['x'], var_name='Variable', value_name='Wert')
         
-        plt.figure(figsize=(25, 10))
-        sns.scatterplot(data=df_long, x='x', y='Wert', hue='Variable')
-        plt.title("Visualisierung aller Testdaten")
-        if self.show_plots:
-            plt.show()  # Plott des Diagrammes
+        plt.figure(figsize=(25, 10))  # Festergröße festlegen
+        
+        # Titel des Fensters festlegen
+        plt.gcf().canvas.manager.set_window_title('Visualisierung der Testdaten')
+        sns.scatterplot(data=df_long,  # Dataframe festlegen
+                         x='x',  # X-Achse festlegen
+                           y='Wert',  # Y-Achse festlegen
+                             color = 'blue',  # Farbe festlegen
+                             )
+        plt.title("Visualisierung aller Testdaten")  # Titel für den Plotfestlegen
+        plt.legend(['Testdatenpunkt'], title='Legende')  # Legende anzeigen
+        if self.show_plots:  # Wenn show_plots True, dass
+            plt.show()  # plot des Diagrammes
 
     def plot_mse_result(self, mse_df, train_df, ideal_df):
         '''
@@ -253,7 +265,10 @@ class Visualisierung:
         '''
         
         plt.figure(figsize=(12, 8))  # Größe festlegen
-
+        
+        # Titel des Fensters festlegen
+        plt.gcf().canvas.manager.set_window_title('Visualisierung der MSE-Ergebnisse')
+        
         # Durchlaufen jeder Zeile in mse_df, um die entsprechende Trainingsfunktion und die dazugehörige ideale Funktionen zu plotten
         for _, row in mse_df.iterrows():  # "_" da nur auf Zeilendaten zugegriffen wird, index wird nicht benötigt.
             train_col = row['y_train_col']  # Erheben der Trainingsfunktion
@@ -266,7 +281,7 @@ class Visualisierung:
             # Plotten der idealen Funktion
             plt.plot(ideal_df['x'], ideal_df[ideal_col], label=f"Ideale Funktion: {ideal_col}", color=color)
 
-        plt.title("Visualisierung der MSE-Berechnungsergebnisse")  # Festlegen des Titels
+        plt.title("Visualisierung des Mean-Squared-Error-Ergebniss")  # Festlegen des Plot-Titels
         plt.xlabel("X-Wert")  # Beschreibung X-Achse
         plt.ylabel("Y-Wert")  # Beschreibung Y-Achse
         plt.legend()  # Legende anzeigen
@@ -286,13 +301,17 @@ class Visualisierung:
             - None implizit, da hier nur der Plot erzeugt wird 
 
         '''
-        plt.figure(figsize=(12, 8))  # Größe festlegen
-
+        plt.figure(figsize=(20, 12))  # Größe festlegen
+        
+        # Titel des Fensters festlegen
+        plt.gcf().canvas.manager.set_window_title('Visualisierung der Validierung der Selektion')
+        
         # Zeichnen jeder idealen Funktion als Linienplot
         ideal_cols = result_df.columns[2:6]  # Vier ideale Funktionen aus result_df
         for i, col in enumerate(ideal_cols):
-            plt.plot(result_df['x'], result_df[col], label=col, color=self.colors[i]) 
-
+            plt.plot(result_df['x'], result_df[col], label=col, color=self.colors[i])
+            # Einträge der Testdatenpunkte in der Legende vorbereiten 
+            plt.plot([], [], marker='o', color=self.colors[i], linestyle='none', label=f'Testdaten zugeordnet zu {col}')
         # iterrieren durch das df für die Farbzuweisung
         for index, row in result_df.iterrows():
             # Dynamische Farbzuweisung basierend auf der 'best_ideal' Spalte
@@ -307,14 +326,14 @@ class Visualisierung:
             # Farbe ist dieselbe des Testdatenpunkts,      
             plt.scatter(row['x'], row['y'], color=color, edgecolor='w', zorder=5)
             # zu jedem Punkt wird die minimale Abweichung hinzugefügt
-            plt.text(row['x'], row['y'], f"{row['min_Abweichung']:.2f}", fontsize=9, ha='right')
-
+            plt.text(row['x'], row['y'], f"{row['min_Abweichung']:.2f}", fontsize=9, ha='right')        
+        
+        plt.plot([], [], marker='o', color='black', linestyle='none', label='Testdaten ohne Zuordnung')
+        plt.plot([], [], ' ', label='Hinter den Testdaten ist die\nminimal Abweichung beschrieben.')    
         plt.title("Kombinierte Visualisierung der idealen Funktionen und Testdaten")
         plt.xlabel("X-Wert")
         plt.ylabel("Y-Wert")
-        plt.legend(title="Ideale Funktionen")
+        plt.legend(title="Legende")
         plt.grid(True)
         if self.show_plots:
             plt.show()  # Plott des Diagrammes
-
-
