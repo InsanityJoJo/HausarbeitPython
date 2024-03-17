@@ -138,51 +138,61 @@ class Visualisierung:
     def plot_ideal_funktions(self, df):
         '''
         Diese Methode visualisiert die Idealen Funktionen.
-        Sie erzeugt 9 Übersichtsplots mit geclusterten Funktionen. Die Gruppierung der Funktionen
-        ist nötig, da sie sehr unterschiedliche y-Wertebereiche, Formen, Maxima enthalten.
-        Der Übersichtlichkeit wegen, sollen die 50 Funktionen in 9 Plots aufgeteilt werden
-        Die Cluster werden nach der Fläche unter Kurve(AUC - Area under Curve) erstellt,
-        um ähnliche Wertebereiche so zu gruppieren.
-        Die Darstellugn der idealen Funktionen dient der grafischen Übersicht über die Daten.
-        Es wird angenommen, dass 'df' validiert wurde und die erforderlichen
+        Diese Visualalisierung ist optional und nicht in der
+        Aufgabenstellung gefordert.
+        Sie erzeugt 9 Übersichtsplots mit geclusterten Funktionen. 
+        Die Gruppierung der Funktionen ist nötig, da sie sehr
+        unterschiedliche y-Wertebereiche, Formen, Maxima enthalten.
+        Der Übersichtlichkeit wegen, sollen die 50 Funktionen
+        in 9 Plots aufgeteilt werden. Die Cluster werden nach 
+        der Fläche unter Kurve(AUC - Area under Curve) erstellt,
+        um ähnliche Wertebereiche so herrauszufinden und die entsprechenden 
+        Funktionen zu gruppieren. Die Darstellugn der idealen Funktionen 
+        dient der grafischen Übersicht über die Daten. Es wird angenommen, 
+        dass 'df' validiert wurde und die erforderlichen
         Spalten enthält. Andernfalls könnte es zu einem KeyError kommen.
-        
+
         Anordnung der Plots:
         |c1|c2|c3|
         |--|--|--|
         |c4|c5|c6|
-        |--|--|--|        
+        |--|--|--| 
         |c7|c8|c9|
-
         Methodenparameter:
-            - df: Pandas Dataframe der Idealen Funktionen, Aufbau Spalten: x, y1, ..., y50
-
-
+        - df: Pandas Dataframe der Idealen Funktionen, 
+                  Aufbau Spalten: x, y1, ..., y50
         Rückgabewert:
-            - None implizit, da hier nur Plots erzuegt werden            
+        - None implizit, da hier nur Plots erzuegt werden
         '''
-        
-        auc_values = []  # Liste zum Speichern der AUC(Area under curve)-Werte für jede Funktion.
-
+        # Liste zum Speichern der AUC(Area under curve)-Werte für jede Funktion.
+        auc_values = []
         # Berechnen des AUC-Werts für jede y-Spalte
         for col in df.columns[1:]:  # Überspringen der x-Spalte
             y_abs = np.abs(df[col])  # absoluter Wert der y-Werte
             auc = simps(y_abs, df['x'])  # Berechne die Fläche unter der Kurve
             auc_values.append(auc)  # Füge den Wert an die Liste an
 
-        # Erstelle ein DataFrame, das die Funktionen und ihre AUC-Werte enthält
+        # Erstelle eines DataFrames, das die Funktionen und ihre AUC-Werte enthält
         func_names = df.columns[1:]  # Funktionsnamen
         auc_df = pd.DataFrame({'Funktion': func_names, 'AUC': auc_values})
 
-        # Verwenden von auc_df um die Funktionen basierend auf ihren AUC-Werten zu clustern.
-        # Einteilung der Funktionen in Quantile basierend auf ihren AUC-Werten.
-        auc_df['Cluster'] = pd.qcut(auc_df['AUC'], 9, labels=False)  # Teile in 9 Cluster
+        # Mit auc_df die Funktionen basierend auf ihren AUC-Werten clustern.
+        # Einteilung der Funktionen in 9 Quantile (Cluster).
+        auc_df['Cluster'] = pd.qcut(auc_df['AUC'], 9, labels=False)
 
         # Cluster-Information in das df einfügen
         # Dictionary von Funktionen und zugehörigen Cluster erstellen.
         function_to_cluster = auc_df.set_index('Funktion')['Cluster'].to_dict()
+
         # Für jede Zeile im df wird die Spalte 'Cluster' aus dem Dictionary gefüllt.
-        df['Cluster'] = df.apply(lambda row: function_to_cluster[row.name] if row.name in function_to_cluster else None, axis=1)
+        # Zuweisung von Clustern zu Zeilen basierend auf 
+        # 'row.name' und dem Dictionary 'function_to_cluster'.
+        # Wenn der Name in 'function_to_cluster', 
+        # dann den Cluster-Wert zuweisen, sonst None.
+        df['Cluster'] = df.apply(
+            lambda row: function_to_cluster[row.name] if row.name in function_to_cluster else None, 
+            axis=1
+            )
 
         # Erstellen der 9 Subplots (3x3)
         fig, axes = plt.subplots(3, 3, figsize=(25, 12), sharex=True)
@@ -193,21 +203,25 @@ class Visualisierung:
             
             # Erstellen eine Liste von Funktionen, die zum aktuellen Cluster 'i' gehören.
             # Das Dictionary 'function_to_cluster' ordnet Funktionen ihren Clustern zu.
-            cluster_functions = [func for func, cluster in function_to_cluster.items() if cluster == i]
+            cluster_functions = [
+                func for func, cluster in function_to_cluster.items() if cluster == i
+                                 ]
             
             # Erstellen eines neuen DataFrames 'cluster_df' für das aktuelle Cluster.
-            
-            cluster_df = df[['x'] + cluster_functions].melt(  # Transformation des DataFrames von einem breiten Format (eine Spalte pro Funktion) zu einem langen Format
+            # Transformation des DataFrames von einem breiten Format
+            # (eine Spalte pro Funktion) zu einem langen Format
+            cluster_df = df[['x'] + cluster_functions].melt(
                 id_vars=['x'],  # ID-Variable
                   var_name='Variable',  # umformen Variable
                     value_name='Wert'  # umformen Wert
                     )
             
             # Zugriff auf den i-ten Subplot innerhalb des 3x3 Grids von Subplots.
-            ax = axes.flatten()[i]  # umwandeln des 2D Arrays in ein 1D Array, zugriff auf den i-ten Subplot
+            # umwandeln des 2D Arrays in ein 1D Array
+            ax = axes.flatten()[i]  
             
             # Erstelle einen Lineplot für das aktuelle Cluster.
-            sns.lineplot(data=cluster_df,  # Dataframe, der visualisert wird
+            sns.lineplot(data=cluster_df,  # Dataframe, das visualisert wird
                           x='x',  # X-Achse 
                            y='Wert',  # Y-Achse
                              hue='Variable',  # Linien
@@ -233,7 +247,7 @@ class Visualisierung:
         plt.suptitle("Visualisierung der idealen Funktionen nach Clustern (Fläche unter Kurve)")
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         if self.show_plots:
-            plt.show()  # Plotten der Diagramme
+            plt.show()  # plotten der Diagramme
 
     def plot_test_data(self, df):
         '''
@@ -245,7 +259,7 @@ class Visualisierung:
         Rückgabewert:
             - None implizit, da hier nur Plots erzuegt werden  
         '''        
-        # Umschmelzen des DataFrames in ein langes Format
+        # Umwandeln des DataFrames in ein langes Format
         df_long = pd.melt(df, id_vars=['x'], var_name='Variable', value_name='Wert')
         
         plt.figure(figsize=(25, 10))  # Festergröße festlegen
@@ -257,11 +271,11 @@ class Visualisierung:
                            y='Wert',  # Y-Achse festlegen
                              color = 'blue',  # Farbe festlegen
                              )
-        plt.title("Visualisierung aller Testdaten")  # Titel für den Plotfestlegen
+        plt.title("Visualisierung aller Testdaten")  # Titel für den Plot festlegen
         plt.xlabel("X-Wert")
         plt.ylabel("Y-Wert")
         if self.show_plots:  # Wenn show_plots True, dass
-            plt.show()  # plot des Diagrammes
+            plt.show()  # plot des Diagramms
 
     def plot_mse_result(self, mse_df, train_df, ideal_df):
         '''
@@ -269,10 +283,18 @@ class Visualisierung:
         Die Darstellung ist ein gemeinsamer Plot von den vier idealen Funktionen,
         sowie der Trainingsdaten. Die Trainigsdaten sind in der Farbe der zugehörigen idealen Funktion dargestellt.
         Sie sind duch gestrichelte Linien verbunden. 
-        Methodenparameter:
-            - mse_df: Pandas Dataframe, Ergebnis der MSE-Berechnung, Spalten: y_train_col, best_ideal_col, min_mse  
-            - train_df: Pandas Dataframe, Trainingsdaten, Spalten: x, y1, ..., y4
-            - ideal_df: Pandas Dataframe, Aufbau Spalten, Spalten: x, y1, ..., y50
+            - mse_df: 
+                - Pandas Dataframe, 
+                - Ergebnis der MSE-Berechnung, 
+                - Spalten: y_train_col, best_ideal_col, min_mse
+            - train_df: 
+                - Pandas Dataframe, 
+                - Trainingsdaten, 
+                - Spalten: x, y1, ..., y4
+            - ideal_df: 
+                - Pandas Dataframe, 
+                - Ideale Funktionen, 
+                - Spalten: x, y1, ..., y50
         Rückgabewert:
             - None implizit, da hier nur der Plot erzeugt wird 
         '''
@@ -282,11 +304,13 @@ class Visualisierung:
         # Titel des Fensters festlegen
         plt.gcf().canvas.manager.set_window_title('Visualisierung der MSE-Ergebnisse')
         
-        # Durchlaufen jeder Zeile in mse_df, um die entsprechende Trainingsfunktion und die dazugehörige ideale Funktionen zu plotten
-        for _, row in mse_df.iterrows():  # "_" da nur auf Zeilendaten zugegriffen wird, index wird nicht benötigt.
+        # Durchlaufen jeder Zeile in mse_df, um die entsprechende Trainingsfunktion
+        # und die dazugehörige ideale Funktionen zu plotten
+        for _, row in mse_df.iterrows():  # "_" Zugriff nur auf Zeilendaten, kein index
             train_col = row['y_train_col']  # Erheben der Trainingsfunktion
             ideal_col = row['best_ideal_col']  # Erheben der idealen Funktion
-            color = self.colors[mse_df.index[mse_df['best_ideal_col'] == ideal_col][0]]  # Farbe basierend auf der Position von Trainings- und idealer Funktion
+            # Farbe basierend auf der Position von Trainings- und idealer Funktion
+            color = self.colors[mse_df.index[mse_df['best_ideal_col'] == ideal_col][0]] 
 
             # Plotten der Trainingsdaten, verbunden mit getrichelten Linien
             plt.plot(train_df['x'], train_df[train_col], label=f"Trainingsdaten: {train_col}", color=color, linestyle='--')
@@ -294,25 +318,31 @@ class Visualisierung:
             # Plotten der idealen Funktion
             plt.plot(ideal_df['x'], ideal_df[ideal_col], label=f"Ideale Funktion: {ideal_col}", color=color)
 
-        plt.title("Visualisierung des Mean-Squared-Error-Ergebniss")  # Festlegen des Plot-Titels
+        plt.title("Visualisierung des Mean-Squared-Error-Ergebniss")  # plot Titel
         plt.xlabel("X-Wert")  # Beschreibung X-Achse
         plt.ylabel("Y-Wert")  # Beschreibung Y-Achse
         plt.legend()  # Legende anzeigen
         plt.grid(True)  # Grid anzeigen
         if self.show_plots:
-            plt.show()  # Plott des Diagrammes
+            plt.show()  # plot des Diagramms
 
     def plot_validation_results(self, result_df):
         '''
-        Diese Methode visualisiert das Endergebnis des Programms. Nachdem die, duch die MSE Berechnung erhobenen idealen Funktionen,
-        durch die Testdaten validiert wurden. Die Idealen Funktionen werden als Linienplot dargestellt. 
-        Die Testdaten werden als Punkte in der Farbe der ihnen zugeordneten idealen Funktion dargestellt. 
-        Wenn keine Zuordnung erfolgen konnte, werden die Testdaten in schwarz dargestellt. Zu den Datenpunkten wird die minimale Anweichung dargestellt.
+        Diese Methode visualisiert das End-Ergebnis des Programms. 
+        Nachdem die, duch die MSE Berechnung erhobenen idealen Funktionen,
+        durch die Testdaten validiert wurden. Die Idealen Funktionen werden
+        als Linienplot dargestellt. Die Testdaten werden als Punkte 
+        in der Farbe der ihnen zugeordneten idealen Funktion dargestellt. 
+        Wenn keine Zuordnung erfolgen konnte, werden die Testdaten 
+        in schwarz dargestellt. Zu den Datenpunkten wird 
+        die minimale Anweichung dargestellt.
         Methodenparameter:
-            - result_df: Pandas Dataframe, Ergebnis der Validierung, Spalten: x, y, (vier ideale Funktionen), best_ideal, min_Abweichung  
+            - result_df: 
+                - Pandas Dataframe,
+                - Ergebnis der Validierung,
+                - Spalten: x, y, (4 ideale Funktionen), best_ideal, min_Abweichung  
         Rückgabewert:
             - None implizit, da hier nur der Plot erzeugt wird 
-
         '''
         plt.figure(figsize=(20, 12))  # Größe festlegen
         
@@ -323,8 +353,14 @@ class Visualisierung:
         ideal_cols = result_df.columns[2:6]  # Vier ideale Funktionen aus result_df
         for i, col in enumerate(ideal_cols):
             plt.plot(result_df['x'], result_df[col], label=col, color=self.colors[i])
+            
             # Einträge der Testdatenpunkte in der Legende vorbereiten 
-            plt.plot([], [], marker='o', color=self.colors[i], linestyle='none', label=f'Testdaten zugeordnet zu {col}')
+            plt.plot([], [],  # unsichtbare Linie
+                marker='o',  # Symbol für Legende
+                 color=self.colors[i],  # Farbe des Punkts 
+                  linestyle='none',  # Keine Linie
+                   label=f'Testdaten zugeordnet zu {col}' # Legeneintrag
+                   )
         # iterrieren durch das df für die Farbzuweisung
         for index, row in result_df.iterrows():
             # Dynamische Farbzuweisung basierend auf der 'best_ideal' Spalte
@@ -339,9 +375,22 @@ class Visualisierung:
             # Farbe ist dieselbe des Testdatenpunkts,      
             plt.scatter(row['x'], row['y'], color=color, edgecolor='w', zorder=5)
             # zu jedem Punkt wird die minimale Abweichung hinzugefügt
-            plt.text(row['x'], row['y'], f"{row['min_Abweichung']:.2f}", fontsize=9, ha='right')        
-        
-        plt.plot([], [], marker='o', color='black', linestyle='none', label='Testdaten ohne Zuordnung')
+            plt.text(row['x'], 
+                      row['y'],
+                       f"{row['min_Abweichung']:.2f}", 
+                        fontsize=9,
+                         ha='right'
+                         )        
+        # Unsichtbare Linie für Legendeneintrag, wie oben
+        # für schwarze punkte
+        plt.plot([], [],
+                  marker='o',
+                   color='black', 
+                    linestyle='none', 
+                     label='Testdaten ohne Zuordnung'
+                     )
+        # Unsichtbare Linie für Legendeneintrag, wie oben
+        # für minimale Abweichung        
         plt.plot([], [], ' ', label='Hinter den Testdaten ist die\nminimal Abweichung beschrieben.')    
         plt.title("Kombinierte Visualisierung der idealen Funktionen und Testdaten")
         plt.xlabel("X-Wert")

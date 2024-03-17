@@ -7,14 +7,11 @@ class Messages(Enum):
     '''
 
     # Nachricht für den FileNotFoundError des Konstruktors von DataLoader
-    # Aufruf über statische Methode file_not_found_msg, wegen f string.
     FILE_NOT_FOUND = "Die Datei {file_path} konnte nicht gefunden werden"  
 
     # Nachricht für den TypeError des Konstruktors von DataLoader
-    # Aufruf über statische Methode file_wrong_type_msg, wegen f string.
     FILE_WRONG_TYPE = "Die Datei {file_path} ist nicht vom Typ .csv"
-    
-    
+        
     # Nachricht: validiert richtiges CVS Format für Testdaten
     VALID_TEST = "Die Daten stimmen mit dem Format der Testdaten überein"
 
@@ -67,17 +64,3 @@ class Messages(Enum):
 
     # Logging Nachricht wenn die DB bereits existiert.
     DATABASE_EXISTS = "Verbindung zur bestehenden Datenbank {db_path} hergestellt."
-    
-    @staticmethod
-    def file_not_found_msg(file_path):
-        '''
-        Statische Methode zur Arbeit mit f-Strings der Fehler Nachricht.
-        '''
-        return Messages.FILE_NOT_FOUND.value.format(file_path=file_path)
-    
-    @staticmethod
-    def file_wrong_type_msg(file_path):
-        '''
-        Statische Methode zur Arbeit mit f-Strings der Fehler Nachricht.
-        '''
-        return Messages.FILE_WRONG_TYPE.value.format(file_path=file_path)

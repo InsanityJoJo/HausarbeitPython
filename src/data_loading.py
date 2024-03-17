@@ -21,12 +21,12 @@ class DataLoader:
         # Sollte die Datei nicht existieren, wird eine FileNotFoundError geworfen.
         if not os.path.exists(file_path):
             # raised den FileNotFoundError mit eigener Nachricht.
-            raise FileNotFoundError(Messages.file_not_found_msg(file_path=file_path))
+            raise FileNotFoundError(Messages.FILE_NOT_FOUND.value.format(file_path=file_path))
 
         # Sollte die Datei nicht auf .csv oder .CSV enden, dann wird ein TypeError geworfen.
         elif not file_path[-4:].lower() == ".csv":
             # wirft den TypeError mit eigener Nachricht
-            raise TypeError(Messages.file_wrong_type_msg(file_path=file_path))
+            raise TypeError(Messages.FILE_WRONG_TYPE.value.format(file_path=file_path))
         else:
             self.file_path = file_path
 
