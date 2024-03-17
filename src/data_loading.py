@@ -6,21 +6,26 @@ import logging
 class DataLoader:
     ''' 
     Diese Klasse enhält Methoden für:
-    - das Auswählen der Datei über den Pfad
-    - das Lesen der Daten aus der CSV-Datei
+    
+    Methoden:
+    - load_data() Liest eine CVS Datei und gibt ein Dataframe zurück
+    - validate_cvs_format() Validiert das Format der CSV Datei
+  
     '''
     def __init__(self, file_path):
         '''
-        Der Konstruktor legt den Pfad der CSV-Datei fest. 
-        Hier wird zudem sicher gestellt, dass die Datei existiert vom Typ CSV ist.
+        Dem Konstruktor wird der Pfad der CSV-Datei übergeben. 
+        Wenn die Datei nicht existiert wird ein FileNotFoundError
+        geworfen. 
+        Der Konstruktor stellt sicher, dass mit dem Pfad
+        eine .csv oder .CSV Datei übergeben wird.
 
         Methodenparameter:
-        - self
         - file_path
         '''
         # Sollte die Datei nicht existieren, wird eine FileNotFoundError geworfen.
         if not os.path.exists(file_path):
-            # raised den FileNotFoundError mit eigener Nachricht.
+            # wirft den FileNotFoundError mit eigener Nachricht.
             raise FileNotFoundError(Messages.FILE_NOT_FOUND.value.format(file_path=file_path))
 
         # Sollte die Datei nicht auf .csv oder .CSV enden, dann wird ein TypeError geworfen.
@@ -32,14 +37,16 @@ class DataLoader:
 
     def load_data(self):
         '''
-        Diese Methode ermöglicht das Lesen der CSV-Datei.
-        Methodenparameter:
-        - self
-        
+        Diese Methode liest die im Dateipfad über den Konstruktor
+        übergebene CSV-Datei. Sie wandelt den Inhalt der Datei in 
+        ein Pandas Dataframe und gibt dieses zurück. Wenn es zum 
+        Fehler kommt wird dieser mit einer eingenen Nachricht zurückgegeben.
+                
         Rückgabewert:
         - Dataframe aus den Daten der CSV-Datei
         '''
         try:
+            # Inhalte aus csv in Dataframe laden.
             df = pd.read_csv(self.file_path)
             logging.info(Messages.FILE_LOADED.value.format(file_path=self.file_path))
             return df
@@ -49,22 +56,21 @@ class DataLoader:
 
     def validate_csv_format(self, df):
         '''
-        Diese Methode ist für die Validierung des Formats der aus den CSVs erstellten Dataframes zuständig.
-        Es wird überprüft ob die Daten dem Format der Trainigs, Ideal oder Testdaten entsprechen. 
-        Die erlaubten Spalten sind in diesen Sets hart einprogrammiert, da laut Aufgabenstellung nur solche Daten zu erwarten sind.
+        Diese Methode ist für die Validierung des Formats,
+        der aus den CSVs erstellten Dataframes zuständig.
+        Es wird überprüft ob die Daten dem Format der Trainigsdaten,
+        Idealen Funktionen oder Testdaten entsprechen. 
+        Die erlaubten Spalten sind vorgegeben in der Aufgabenstellung 
+        und werden daher überprüft.
         
-        Die Validierung ist optional, da das Programm auch mit anderen Formaten arbeiten könnte.
-        Wichtig ist nur, dass die x-Werte in der ersten Spalte stehen.
-
-        Ist das Format nicht das der Beispieldatensätze, so wird ein ValueError mit eigener Nachricht übergeben.
+        Ist das Format nicht das der Beispieldatensätze, 
+        so wird ein ValueError mit eigener Nachricht übergeben.
         
         Methodenparameter:
-        - self
         - df: Dataframe, dass durch das Programm verwendet werden soll
         
         Rückgabewert:
-        - Nachricht für gültige Formate
-        - ValueError für ungültige Formate
+        - Rückmeldung als String
         '''
 
         # Sets der erlaubten Spalten        
@@ -73,7 +79,8 @@ class DataLoader:
             ['x', 'y1', 'y2', 'y3', 'y4'],  # Format der Trainingsdaten
             ['x'] + [f'y{i}' for i in range(1, 51)]  # Format der idealen Funktionen
         ]
-        # Aus dem Dataframe werden die Spalten als Listen mit den erlaubten Spalten verglichen.
+        # Aus dem Dataframe werden die Spalten als Listen,
+        # mit den erlaubten Spalten verglichen.
         # Listen, weil die Reihenfolge eine Rolle spielt.
         df_columns = df.columns.tolist()
     
