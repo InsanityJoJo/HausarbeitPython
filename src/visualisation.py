@@ -36,11 +36,12 @@ class Visualisierung:
 
     def plot_train_data(self, df):
         '''
-        Diese Methode visualisiert die Trainingsdaten.
-        Sie erzeugt zwei Übersichtsplots (einen Scatterplot, einen Linienplot) 
-        und vier detaillierte Plots für jede Funktion in 'y1' bis 'y4', sowohl als Scatter- 
-        als auch Linienplot. Es wird angenommen, dass 'df' validiert wurde und die erforderlichen
-        Spalten enthält. Andernfalls könnte es zu einem KeyError kommen.
+• • • • Diese Methode visualisiert die Trainingsdaten.
+• • • • Sie erzeugt zwei Übersichtsplots (einen Scatterplot, einen Linienplot) 
+• • • • und vier detaillierte Plots für jede Funktion in 'y1' bis 'y4', sowohl als 
+        Scatter- als auch Linienplot. Es wird angenommen, dass 'df' validiert wurde 
+        und die erforderlichen Spalten enthält. 
+        Andernfalls könnte es zu einem KeyError kommen.
         
         Anordnung der Plots:
         |TÜ|y1|y2|y3|y4|  <-- Erste Zeile Scatterplots
@@ -54,43 +55,47 @@ class Visualisierung:
             - None implizit, da hier nur Plots erzuegt werden            
         '''
 
-        # Erstellung eines Grids von subplots, die Zusammen dargestellt werden sollen.
+        # Erstellung eines Grids von subplots, die zusammen dargestellt werden sollen.
         fig, axes = plt.subplots(2,  # 2 Zeilen
                                   5,  # 5 Spalten
                                     figsize=(25, 8)  # Darstellungsgröße
                                     )  
-        # Titel des Fenster festlegen
+        # Titel des Fensters festlegen
         fig.canvas.manager.set_window_title('Visualisierung der Trainingsdaten')
 
         # [0,0] Erste Zeile, erste Spalte: 
         # Übersichtsplot mit allen Daten geplottet als Punkte
         
-        # Durch die vier Trainingsfunktionen iterrieren und zusammen als seaborn scatterplot darstellen.
+        # Durch die vier Trainingsfunktionen iterrieren
+        # und zusammen als seaborn scatterplot darstellen.
         for i, col in enumerate(['y1', 'y2', 'y3', 'y4']):
             sns.scatterplot(data=df,  # Auswahl des Dataframes
                              x='x',  # Auswahl der X-Werte 
-                              y=col,  # Auswahl der Y-Werte, hier jeweils für alle Funktionen neu gezeichnet
+                              y=col,  # Auswahl der Y-Werte, je Funktionen neu gezeichnet
                                ax=axes[0, 0],  # Auswahl des Darstellungortes im Grid
                                 label=col,  # Hinzufügen der Funktion zur Legende
-                                 color=self.colors[i]  # Auswahl der Farbe für die Funktion
+                                 color=self.colors[i]  # Auswahl der Farbe der Funktion
                                  )
         
-        axes[0, 0].set_title('Scatterplot über alle Trainingsdaten')  # Titel des Plots festlegen
-        axes[0, 0].legend()  # Legende für diesen Plot darstellen
+        axes[0, 0].set_title('Scatterplot über alle Trainingsdaten')  # Titel subplot
+        axes[0, 0].legend()  # Legende für diesen subplot darstellen
 
         # [0, 1-4] Erste Zeile, Spalten 2-5:
         # Detaillierte Punktplots für jede Trainingsfunktion
 
-        # Durch die vier Trainingsfunktionen iterrieren und getrennte als einzelen scatterplots darstellen.
-        for i, col in enumerate(['y1', 'y2', 'y3', 'y4'], start=1):  # Beginnt mit der 2. Spalte, da die erste x ist.
+        # Durch die vier Trainingsfunktionen iterrieren
+        # und getrennt als einzelen scatterplots darstellen.
+        # Beginnt mit der 2. Spalte, da die erste x ist.
+        for i, col in enumerate(['y1', 'y2', 'y3', 'y4'], start=1):
             sns.scatterplot(data=df,  # Auswahl des Dataframes
                              x='x',  # Auswahl der X-Werte
                                y=col,  # Auswahl der Y-Werte
                                  ax=axes[0, i],  # Auswahl des Darstellungortes im Grid
-                                   color=self.colors[i-1]   # Auswahl der Farbe für die Funktion, i-1 weil start=1
-                                   )
+                                  # Auswahl der Farbe für die Funktion, i-1 weil start=1
+                                  color=self.colors[i-1]                                   
+                                  )
             
-            axes[0, i].set_title(f'Detailansicht {col} (Punkte)')  # Titel für den jeweiligen Plot festlegen
+            axes[0, i].set_title(f'Detailansicht {col} (Punkte)')  # Titel der subplots
             
             # Anpassen des Y-Wertebereichs für y3 für eine aussagekräftige Darstellung
             if col == 'y3':
@@ -99,23 +104,28 @@ class Visualisierung:
         # [1, 0] Zweite Zeile, erste Spalte:
         # Übersichtsplot mit allen Daten als Linienplot
                 
-        # Durch die vier Trainingsfunktionen iterrieren und zusammen als Linienplot darstellen.                
+        # Durch die vier Trainingsfunktionen iterrieren
+        # und zusammen als Linienplot darstellen.                
         for i, col in enumerate(['y1', 'y2', 'y3', 'y4']):
             axes[1, 0].plot(df['x'],  # Auswahl der X-Werte
                              df[col],  # Auswahl der Y-Werte
                                label=col,  # Funktion in die Legende einfügen
                                  color=self.colors[i])  # Farbe der Funktion auswählen
 
-        axes[1, 0].set_title('Linienplot über alle Trainingsdaten')  # Titel des Plots festlegen
+        axes[1, 0].set_title('Linienplot über alle Trainingsdaten')  # Titel des subplots
         axes[1, 0].legend()  # Legende für diesen Plot darstellen
 
         # [1, 1-4] Zweite Zeile, Spalten 2-5:       
         # Detaillierte Linienplots für jede Trainingsfunktion
 
-        # Durch die vier Trainingsfunktionen iterrieren und als Lininenplots darstellen.
-        for i, col in enumerate(['y1', 'y2', 'y3', 'y4'], start=1):  # Beginnt mit der 2. Spalte, da die erste x ist.
-            axes[1, i].plot(df['x'], df[col], color=self.colors[i-1])  # Auswahl für X-Werte, Y-Werte, Farbe
-            axes[1, i].set_title(f'Detailansicht {col} (Linien)')  # Titel für den jeweiligen Plot festlegen
+        # Durch die vier Trainingsfunktionen iterrieren
+        # und als Lininenplots darstellen.
+        # Beginnt mit der 2. Spalte, da die erste x ist.
+        for i, col in enumerate(['y1', 'y2', 'y3', 'y4'], start=1):
+            # Auswahl für X-Werte, Y-Werte, Farbe
+            axes[1, i].plot(df['x'], df[col], color=self.colors[i-1])
+            # Titel für den jeweiligen Plot festlegen
+            axes[1, i].set_title(f'Detailansicht {col} (Linien)') 
             
             # Anpassen des Y-Wertebereichs für y3 für eine aussagekräftige Darstellung
             if col == 'y3':
@@ -123,7 +133,7 @@ class Visualisierung:
 
         plt.tight_layout()  # Layout der Plots
         if self.show_plots:
-            plt.show()  # Plotten der Diagramme
+            plt.show()  # plotten der Diagramme
 
     def plot_ideal_funktions(self, df):
         '''

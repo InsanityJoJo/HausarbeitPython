@@ -29,10 +29,9 @@ class Train(Base):
         '''
         Diese Methode überschreibt die der Oberklasse. 
         Sie nennt die Spalten des Dataframes um,
-        so dass sie an die der Tabelle passen. 
+        so dass sie an die vorgegebenen, der Tabelle passen. 
         Sie fügt die Daten dann an die Tabelle an. 
-        Die Spaltenamen werden angepasst.
-        
+                
         Methondenparameter:
         - df: Pandas Dataframe der Trainingsdaten
         - engine: Die Verbindung zur Datenbank in der
@@ -50,6 +49,7 @@ class Train(Base):
             'y4': 'Y4 (Training Funktion)',
         })
         try:
+            # Anfügen der Daten
             df_renamed.to_sql(cls.__tablename__, con=engine, if_exists='append', index=False)
             # Konfiguration der Logging Info-Nachrichten im positiven Fall
             logging.info(Messages.DATA_INSERTED.value.format(table_name=cls.__tablename__))

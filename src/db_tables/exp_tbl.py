@@ -5,16 +5,15 @@ import logging
 
 class Test(Base):
     '''
-    Diese Klasse ist das modell für die Tabelle der Testdaten
+    Diese Klasse ist das Modell für die Tabelle der Testdaten
     Sie erbt von der Klasse Base
 
     Aufbau Tabelle:
-        Spalten: id,
-        Zeilen: 
+        Spalten: id, x_punkt, y_punkt
+        Zeilen: durch df befüllt
 
     Methoden:
-
-    add_df_to_tbl: Hinzüfügen von Daten aus einem Dataframe
+    - add_df_to_tbl: Hinzüfügen von Daten aus einem Dataframe
      
     '''
     __tablename__ = 'Testdaten'
@@ -27,9 +26,8 @@ class Test(Base):
         '''
         Diese Methode überschreibt die der Oberklasse. 
         Sie nennt die Spalten des Dataframes um,
-        so dass sie an die der Tabelle passen. 
+        so dass sie an die vorgegebenen, der Tabelle passen. 
         Sie fügt die Daten dann an die Tabelle an. 
-        Die Spaltenamen werden angepasst.
         
         Methondenparameter:
         - df: Pandas Dataframe der Testdaten
@@ -45,6 +43,7 @@ class Test(Base):
             'y': 'y_punkt' 
         })
         try:
+            # Daten anfügen
             df_renamed.to_sql(cls.__tablename__, con=engine, if_exists='append', index=False)
             # Konfiguration der Logging Info-Nachrichten im positiven Fall
             logging.info(Messages.DATA_INSERTED.value.format(table_name=cls.__tablename__))

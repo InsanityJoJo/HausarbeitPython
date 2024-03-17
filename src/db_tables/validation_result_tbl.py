@@ -7,18 +7,19 @@ import logging
 
 class Summery(Base):
     '''
-    Diese Klasse ist das Modell für die Tabelle der Zusammenfassung Ergebnisse in der DB.
+    Diese Klasse ist das Modell für die Tabelle,
+    der Zusammenfassung Ergebnisse in der DB.
    
 
     Aufbau Tabelle:
         Spalten: 
-            - id: Integer
-            - x_punkt: Float
-            - y_punkt: Float
-            - abweichung: Float
-            - y_Ideal: String
-        Zeilen: 
-            - befüllt durch df
+        - id, 
+        - X, 
+        - Y1 (Test Funktion), 
+        - Delta Y (Abweichung), 
+        - Nummer der Idealen Funktion
+        
+        Zeilen: befüllt durch Pandas Dataframe
 
     Methoden:
 
@@ -39,7 +40,7 @@ class Summery(Base):
                 ...
 
     '''
-    
+
     __tablename__ = 'Zusammenfassung'
     id = Column(Integer, primary_key=True)
     x_punkt = Column(Float, name='X (Test Funktion)')
@@ -52,10 +53,9 @@ class Summery(Base):
         '''
         Diese Methode überschreibt die der Oberklasse. 
         Sie nennt die Spalten des Dataframes um,
-        so dass sie an die der Tabelle passen. 
+        so dass sie zu den Vorgesehenen, der Tabelle passen. 
         Sie fügt die Daten dann an die Tabelle an. 
-        Die Spaltenamen werden angepasst.
-        
+         
         Methondenparameter:
         - df: Pandas Dataframe der validierten Selektion
         - engine: Die Verbindung zur Datenbank in der
@@ -73,6 +73,7 @@ class Summery(Base):
             'best_ideal': 'Nummer der Idealen Funktion',
         })
         try:
+            # Daten anfügen
             df_to_insert.to_sql(cls.__tablename__, con=engine, if_exists='append', index=False)
             # Konfiguration der Logging Info-Nachrichten im positiven Fall
             logging.info(Messages.DATA_INSERTED.value.format(table_name=cls.__tablename__))
