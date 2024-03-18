@@ -43,7 +43,9 @@ class TestMathematics(unittest.TestCase):
 
         # um zu überprüfen, ob dieser im Fehlerfall aufgerufen wird
         # Überprüfen, ob eine Exception geworfen wird
-        with unittest.mock.patch('src.math_logic.logging.error') as mocked_logging_error:
+        with unittest.mock.patch(
+            'src.math_logic.logging.error'
+            ) as mocked_logging_error:
             # Erwarten einer Exception, da die Series unterschiedliche Längen haben
             with self.assertRaises(Exception):
                 Mathematics.calculate_mse(actual_series, predicted_series)
@@ -52,14 +54,16 @@ class TestMathematics(unittest.TestCase):
     def test_calculate_min_mse_files(self):
         '''
         Diese Methode soll testen, ob die Beispieldatensäte 
-        mit dem mse-Verfahren verechnet werden können. 
+        mit dem mse-Verfahren verechnet werden können.
+        - pytest 
         '''
-        train_loader = DataLoader("data/example_data/train.csv")  # Loader für die train.csv
-        ideal_loader = DataLoader("data/example_data/ideal.csv")  # Loader für die ideal.csv
-
-        train = train_loader.load_data()  # Speichern der Trainingsdaten als dataframe
-        ideal = ideal_loader.load_data()  # Speichern der Idealfunktionen als dataframe
+        # Test Daten Laden
+        train_loader = DataLoader("data/example_data/train.csv")  
+        ideal_loader = DataLoader("data/example_data/ideal.csv")
+        train = train_loader.load_data() 
+        ideal = ideal_loader.load_data()  
         
+        # Berechnung MSE
         result = Mathematics.calculate_min_mse(train, ideal)
 
         assert type(result) == pd.DataFrame
@@ -121,11 +125,15 @@ class TestMathematics(unittest.TestCase):
     
     def test_point_comparison_exception_handling(self):
         '''
-        Diese Methode testet die Exception-Handhabung in der point_comparison-Methode,
+        Diese Methode testet die Exception-Handhabung 
+        in der point_comparison-Methode,
         wenn nicht-numerische Eingaben übergeben werden.
         '''
-        # Überprüfen, ob eine Exception geworfen wird, bei nicht-numerischer Eingabe
-        with unittest.mock.patch('src.math_logic.logging.error') as mocked_logging_error:
+        # Überprüfen, ob eine Exception geworfen wird, 
+        # bei nicht-numerischer Eingabe
+        with unittest.mock.patch(
+            'src.math_logic.logging.error'
+            ) as mocked_logging_error:
             with self.assertRaises(Exception):
                 Mathematics.point_comparison("keineZahl", 5)
             mocked_logging_error.assert_called()
