@@ -62,7 +62,7 @@ def main():
     print("Überprüfen des Formats der idealen Funktionen...")
     print(ideal_loader.validate_csv_format(ideal_df).value)
     print(" ")
-    print("Überprüfen des Formats der  Testdaten...")
+    print("Überprüfen des Formats der Testdaten...")
     print(test_loader.validate_csv_format(test_df).value)
     print(" ")
     # Verarbeitung der Daten
@@ -114,7 +114,7 @@ def main():
         vis.plot_mse_result(mse_df, train_df, ideal_df)
         vis.plot_validation_results(result_df)    
     
-    elif Gui.ask_user("Visualisierung der Ergebnisse","Möchten Sie die Ergebnisse visualisieren?"):
+    elif Gui.ask_user("Visualisierung der Ergebnisse","Möchten Sie nur die Ergebnisse visualisieren?"):
         print("Visualisierung wird durchgeführt...")
         vis = Visualisierung(show_plots=True)
         vis.plot_validation_results(result_df)
