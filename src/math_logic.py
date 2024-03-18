@@ -42,14 +42,18 @@ class Mathematics:
     @staticmethod  
     def calculate_mse(actual, predicted):
         """
-        Berechnet den Mean Squared Error
+        Diese Methone berechnet den Mean Squared Error.
+        Sie verarbeitet zwei Pandas Series. "actual" sind
+        Werte aus dem Training. "predicted" representieren
+        Werte der jeweiligen idealen Funktion. Die Berechnung
+        gibt das Ergebnis "result" von Datentyp float zurück.
         
         Methodenparameter:
-        - actual: int oder float, tatsachlicher Wert
-        - predicted: int oder float, voraussichtlicher Wert
+        - actual: Padas Series
+        - predicted: Pandas Series
         
         Rückgabewert:
-        - result: float, Mean Squared Error
+        - result: float
         """
         # Subtrahieren actual - predicted
         # Quadrieren des Ergebnisses
@@ -62,12 +66,16 @@ class Mathematics:
             raise
 
     @staticmethod
-    def calculate_min_mse(train, ideal):
+    def calculate_min_mse(train_df, ideal_df):
         """
-        Vergleicht Trainingsdaten mit idealen Daten
-        und findet die beste Übereinstimmung basierend auf dem MSE.
+        Diese Methode wendet die MSE Berechung auf 
+        ein Padas Dataframe von Trainingsdaten und 
+        ein Pandas Dataframe von idealen Funktionen an.
+        Sie findet die beste Übereinstimmung basierend auf dem MSE,
+        zwischen den Funktionsspalten der Dataframes.
         Die Dataframes werden durch die Klasse DataLoader geladen
         und validiert.
+        Für die MSE Berechnung wird calculate_mse() eingesetzt
 
         Übergabeparameter:
         train: Dataframe aus Trainingsdaten
@@ -81,7 +89,7 @@ class Mathematics:
         
         # über die y-Spalten im Trainingsdatensatz iterrieren, 
         # die x-Spalte wird durch [1:] übersprungen
-        for y_train_col in train.columns[1:]:
+        for y_train_col in train_df.columns[1:]:
 
             # Der Minimale MSE beginnt bei unendlich, 
             # damit dieser sicher nicht unter dem ersten errechneten MSE liegt.
@@ -89,29 +97,39 @@ class Mathematics:
             best_ideal_col = None
             # hier wird über die y-Spalten im Ideal-Datensatz iterriert.
             # Auch hier wird die x-Spalte mit [1:] übersprungen.
-            for y_ideal_col in ideal.columns[1:]:
+            for y_ideal_col in ideal_df.columns[1:]:
 
-                # berechnen des MSE auf der aktuellen y Spalte von Trainigs und Ideal Datensatz
-                mse = Mathematics.calculate_mse(train[y_train_col], ideal[y_ideal_col])
+                # berechnen des MSE auf der aktuellen y Spalte
+                # von Trainigs und Ideal Datensatz
+                mse = Mathematics.calculate_mse(train_df[y_train_col], ideal_df[y_ideal_col])
                 
                 if mse < min_mse:
                     min_mse = mse
                     best_ideal_col = y_ideal_col
             
-            results.append({'y_train_col': y_train_col, 'best_ideal_col': best_ideal_col, 'min_mse': min_mse})
+            # Hinzufügen des errechneten min MSE 
+            # und der entsprechenden idealen Funktion        
+            results.append({
+                            'y_train_col': y_train_col, 
+                            'best_ideal_col': best_ideal_col,
+                            'min_mse': min_mse
+                            })
         try:
+            # Rückgabe des Ergebnisses als DF
             results_df = pd.DataFrame(results)
             logging.info(Messages.MSE_CALCULATED.value.format(result=results_df))
             return results_df
         except Exception as e:
-            logging.error(Messages.ERROR_MSE_CALCULATED.value.format(actual=train, predicted=ideal, error=e))
+            logging.error(Messages.ERROR_MSE_CALCULATED.value.format(actual=train_df[y_train_col], predicted=ideal_df[y_ideal_col], error=e))
             raise
 
     @staticmethod
     def point_comparison(y_punkt, y_ideal):
         '''
-        Diese Methode führt einen Punktvergleich durch mit zwei Punkten durch. Wenn gilt:
-        (y_punkt-y_ideal)**2 < sqr(2)*y_punkt**2 , dann wird True zurückgegeben. 
+        Diese Methode führt einen Punktvergleich durch.
+        Wenn gilt:
+        (y_punkt-y_ideal)**2 < sqr(2)*y_punkt**2
+        wird True zurückgegeben. 
 
         Methodenparameter:
         - y_punkt: int oder float, 1. y-Wert
@@ -121,6 +139,7 @@ class Mathematics:
         - result: boolean
         '''    
         try:
+            # Durchführen des Punktvergleichs
             result = (y_punkt-y_ideal)**2 < math.sqrt(2)*y_punkt**2
             # logging.info(Messages.VALIDATED_SELECTION.value)
             return result
@@ -144,33 +163,24 @@ class Mathematics:
         - result_df: Neues DataFrame mit den Spalten: 
             x, y, y_ideal1, y_ideal2, y_ideal3, y_ideal4, best_ideal, min_Abweichung
         """
-        logging.info(
-            f'mse_df: {mse_df}\
-            ideal_df: {ideal_df}\
-            test_df: {test_df}'
-        )
+        logging.info(Messages.DATAFRAME_OVERVIEW.value.format(mse_df=mse_df, ideal_df=ideal_df, test_df=test_df))
         # Die Namen der viel Idealen Funktionen aus dem mse Ergebniss extrahieren
         ideal_funktion_names = mse_df['best_ideal_col'].unique()
-        logging.info(
-            f'ideal_funktion_names: {ideal_funktion_names}'
-        )
+        logging.info(Messages.IDEAL_FUNKTION_NAMES.value.format(ideal_funktion_names=ideal_funktion_names))
 
         # ideal_df filtern, so dass nur noch die vier idealen Funktionen behalten werden
         filtered_ideal_df = ideal_df[['x'] + list(ideal_funktion_names)]
-        logging.info(
-            f'filtered_ideal_df: {filtered_ideal_df}'
-        )        
+        logging.info(Messages.FILTERED_IDEAL_DF.value.format(filtered_ideal_df=filtered_ideal_df))        
+        
         # verbinden von Test_df und den entsprechenden x Werten aus fitered_ideal_df 
         result_df = pd.merge(test_df, filtered_ideal_df[filtered_ideal_df['x'].isin(test_df['x'])], how='left', on='x')
-        logging.info(
-            f'result_df: {result_df}'
-        )        
+        logging.info(Messages.RESULT_DF.value.format(result_df=result_df))        
+        
         # Initialisiere neue Spalten für das Ergebnis-DataFrame
         result_df['best_ideal'] = None
         result_df['min_Abweichung'] = float('inf')
-        logging.info(
-            f'result_df: {result_df}'
-        ) 
+        logging.info(Messages.RESULT_DF.value.format(result_df=result_df)) 
+
         # Durch die Zeilen des resultierenden DataFrames iterieren
         for index, row in result_df.iterrows():
             x_test = row['x']
@@ -202,7 +212,7 @@ class Mathematics:
         try:
             # Logging Vorbereitung um beim Test das Ergebniss vollständig zu sehen.
             result_str = result_df.to_string()  
-            logging.info(f'Die Selektion wurde validiert: \n{result_str}')
+            logging.info(Messages.RESULT_DF_STRING.value.format(result_str=result_str))
             return result_df
         except Exception as e:
             logging.error(Messages.ERROR_VALIDATED_SELECTION.value.format(error=e))

@@ -5,7 +5,7 @@ class Messages(Enum):
     Diese Klasse beinhaltet alle Systemnachrichten des Proramms.
     Hier werden Nachrichten angepasst.
     '''
-
+    # Klasse Dataloader
     # Nachricht für den FileNotFoundError des Konstruktors von DataLoader
     FILE_NOT_FOUND = "Die Datei {file_path} konnte nicht gefunden werden"  
 
@@ -26,27 +26,30 @@ class Messages(Enum):
         Für Testdaten sind Spaten x, y erlaubt.\
             Für Trainingsdaten sind die Spaten x, y1, ..., y4 erlaubt.\
                 Für die idealen Funktionen sind die Spaten x, y1, ..., y50 erlaubt."  
-    
-    # Logging Nachrichten:
-    
+        
     # Logging Nachricht zur Information, wenn die Datei im DataLoader geladen wurde.
     FILE_LOADED = "Datei {file_path} wurde geladen."
     
     # Logging Nachricht zur Information, wenn die Datei im DataLoader geladen wurde.
     ERROR_FILE_LOADED = "Datei {file_path} konnte nicht geladen werden: {error}."
 
+
+    # Klasse Base
     # Logging Nachricht, wenn die Daten an eine Tabelle angefügt wurden
     DATA_INSERTED = "Daten wurden erfolgreich in die Tabelle {table_name} eingefügt."
 
     # Logging Error, wenn ein Fehler beim Einfügen der Daten passiert ist
     ERROR_DATA_INSERTED = "Fehler beim Einfügen der Daten in {__tablename__}: {error}"
     
+    # Pytest fixture db_session
     # Logging Nachricht, wenn die Testdaten wieder gelöscht wurden. 
     TABLE_DROPPED = "Tabelle wurde im Testfall gelöscht."
 
     # Logging Error, wenn die Testdaten nicht gelöscht wurden
     ERROR_TABLE_DROPPED = "Fehler beim Löschen der Tabelle der Testdaten: {error}"
 
+
+    # Klasse Mathematics
     # Logging Nachricht, wenn der Mean Squared Error erfolgreich berechnet wurde.
     MSE_CALCULATED = "Berechnung MSE erfolgreich: {result}"
 
@@ -58,9 +61,29 @@ class Messages(Enum):
 
     # Logging Error, wenn ein Fehler bei der Validierung der Selektion vorliegt.
     ERROR_VALIDATED_SELECTION = "Fehler bei der Berechnung: {error}"
-    
-    # Logging Nachricht wenn due DB neu erstellt wurde-
+
+    # Logging Nachricht, als Übersicht über die Dataframes die verarbeitet werden sollen.
+    DATAFRAME_OVERVIEW = "mse_df: {mse_df}\
+            ideal_df: {ideal_df}\
+            test_df: {test_df}"
+
+    # Logging Nachricht, Übersicht über die vier idealen Funktionen
+    IDEAL_FUNKTION_NAMES = "ideal_funktion_names: {ideal_funktion_names}"
+
+    # Logging Nachricht, Übersicht über das DF mit vier idealen Funktionen
+    FILTERED_IDEAL_DF = "filtered_ideal_df: {filtered_ideal_df}"
+
+    # Logging Nachricht, Übersicht result df
+    RESULT_DF = "result_df: {result_df}"
+
+    # Logging Nachricht, Übersicht result df String
+    RESULT_DF_STRING = "Die Selektion wurde validiert: \n{result_str}"
+
+
+    # engine get_engine
+    # Logging Nachricht wenn due DB neu erstellt wurde.
     DATABASE_CREATED = "Die Datenbank existiert nicht und wird erstellt an der Stelle {db_path}."
 
     # Logging Nachricht wenn die DB bereits existiert.
     DATABASE_EXISTS = "Verbindung zur bestehenden Datenbank {db_path} hergestellt."
+
