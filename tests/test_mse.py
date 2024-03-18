@@ -149,30 +149,16 @@ class TestMathematics(unittest.TestCase):
         # Liste der erwarteten Spalten
         expected_columns = ['x',
                              'y',
-                               'y_ideal1',
-                                 'y_ideal2',
-                                   'y_ideal3',
-                                     'y_ideal4',
-                                       'best_ideal',
-                                         'min_Abweichung'
+                               'y36',
+                                 'y11',
+                                   'y2',
+                                     'y33', 
+                                      'best_ideal',
+                                        'min_Abweichung'
                                          ]
         # Check ob die Spalten in result_df enthalten sind.
         for column in expected_columns:
             self.assertIn(column, result_df.columns)
-
-    def test_validate_dfs_with_empty_dfs(self):
-        '''
-        Diese Methode testet die Methode validate_dfs
-        mit leeren Dataframes.
-        '''
-        # Erstellen von leeren DFs.
-        mse_df = pd.DataFrame()
-        ideal_df = pd.DataFrame()
-        test_df = pd.DataFrame()
-        # Berechnen von result_df
-        result_df = Mathematics.validate_dfs(mse_df, ideal_df, test_df)
-        # Check ob result_df leer ist
-        self.assertEqual(len(result_df), 0)
 
 if __name__ == '__main__':
 

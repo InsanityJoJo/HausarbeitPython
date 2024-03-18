@@ -18,6 +18,8 @@
   "tests/test_mse.py::TestMathematics::test_incompatible_dataframes",
   "tests/test_mse.py::TestMathematics::test_point_comparison_calculation",
   "tests/test_mse.py::TestMathematics::test_point_comparison_exception_handling",
+  "tests/test_mse.py::TestMathematics::test_validate_dfs_output_format",
+  "tests/test_mse.py::TestMathematics::test_validate_dfs_with_empty_dfs",
   "tests/test_mse.py::test_calculate_min_mse",
   "tests/test_testdata_validation.py::test_testdata_valid",
   "tests/test_visualisierung.py::test_connected_plot_train_data",
