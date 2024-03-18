@@ -1,1 +1,4 @@
-{}
+{
+  "tests/test_mse.py::TestMathematics::test_calculate_min_mse": true,
+  "tests/test_mse.py::TestMathematics::test_incompatible_dataframes": true
+}

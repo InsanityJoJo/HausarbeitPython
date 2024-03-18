@@ -5,6 +5,12 @@ from src.gui_elemets import Gui
 class TestGui(unittest.TestCase):
     '''
     Diese Klasse testet die Klasse Gui.
+    
+    Testmethoden:
+    - test_select_file()
+    - test_ask_user_yes()
+    - test_ask_user_no()
+    - test_end_message()
 
     '''
     @patch('src.gui_elemets.Gui.select_file')
