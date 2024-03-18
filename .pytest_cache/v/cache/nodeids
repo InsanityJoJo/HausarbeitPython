@@ -1,5 +1,9 @@
 [
   "tests/test_db.py::test_db_insertion",
+  "tests/test_gui_elements.py::TestGui::test_ask_user_no",
+  "tests/test_gui_elements.py::TestGui::test_ask_user_yes",
+  "tests/test_gui_elements.py::TestGui::test_end_message",
+  "tests/test_gui_elements.py::TestGui::test_select_file",
   "tests/test_integration.py::test_csv_loading_and_db_insertion",
   "tests/test_integration.py::test_load_data_mse_store_result",
   "tests/test_loading.py::test_load_data",

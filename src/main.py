@@ -19,7 +19,7 @@ def main():
     Dies ist die Hauptmethode für das Ausführen des Programms. Über User Input werden die 
     Parameter
     '''
-    # Logging anpassen
+    # Logging und Warnungen anpassen
     # Logging lvl kann hier angepasst werden
     # Zum Debugging werde alle Funktionen
     # umfangreich auf logging lvl INFO geloggt
@@ -27,11 +27,12 @@ def main():
     logging.basicConfig(level=logging.WARN)
     # Logging sqlalchemy anpassen
     logging.getLogger('sqlalchemy.engine').setLevel(logging.ERROR)
-    
+    # warnungen filtern
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     warnings.filterwarnings("ignore", category=FutureWarning)
 
-    logging.info("Start des Programms.")  # Logging info zum Start des Programms
+    # Logging info zum Start des Programms
+    logging.info("Start des Programms.")  
     start_time = time.time()  # Zeit zu beginn des Programms
     print("Programmstart")
     print(" ")
