@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from src.status_messages import Messages
 
 
-def get_engine(db_path, echo=True):
+def get_engine(db_path, echo=False):
     '''
     Diese Methode erstellt die Datenbank. 
     Der Speicherort der DB wird durch den User festgelegt.
