@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 class Messages(Enum):
     '''
@@ -87,3 +87,45 @@ class Messages(Enum):
     # Logging Nachricht wenn die DB bereits existiert.
     DATABASE_EXISTS = "Verbindung zur bestehenden Datenbank {db_path} hergestellt."
 
+    # Main Methode
+    # Nachricht zu Programmstart
+    START_PROGRAM = "Programmstart"
+
+    # Nachricht zu Beginn des Logging
+    PROGRAM_START = "Start des Programms."
+
+    # Nachrichten für die Auswahl der Daten durch den Benutzer
+    SELECT_TRAINING_DATA = "Wählen sie die Trainingsdaten."
+    SELECT_IDEAL_FUNCTIONS = "Wählen sie die Daten der idealen Funktionen."
+    SELECT_TEST_DATA = "Wählen sie die Testdaten."
+    
+    # Label des Gui-Elemets für die Auswahl
+    PROMPT_TRAINING_DATA = "Auswahl der Trainingsdaten."
+    PROMPT_IDEAL_FUNCTIONS = "Auswahl der idealen Funktionen."
+    PROMPT_TEST_DATA = "Auswahl der Testdaten."
+
+    # Nachrichten für das Laden der Daten
+    DATA_LOADING_STARTS = "Datenladen beginnt"
+    DATA_LOADED = "Daten wurden geladen"
+    
+    # Nachrichten für die Formatsprüfung
+    CHECK_TRAINING_DATA_FORMAT = "Überprüfen des Formats der Trainingsdaten..."
+    CHECK_IDEAL_FUNCTIONS_FORMAT = "Überprüfen des Formats der idealen Funktionen..."
+    CHECK_TEST_DATA_FORMAT = "Überprüfen des Formats der Testdaten..."    
+
+    # Nachricht für MSE-Berechnung
+    MSE_CALCULATED_INFO = "Mean squared Error wurde berechnet"
+    # Nachricht für Validierung
+    VALIDATION_COMPLETED_INFO = "Die Validierung der Selektion wurde durchgeführt"
+    
+    # Nachrichten für die Datenbankauswahl und das Laden der Daten
+    SELECT_DATABASE = "Wählen sie die Datenbank"
+    DATA_LOADED_TO_DB = "Die Daten wurden in die Datenbank geladen"
+
+    # Nachricht, wenn die Visualisierung abgeschlossen ist
+    VISUALIZATION_COMPLETED = "Visualisierung abgeschlossen"
+    
+    # Nachrichten zum Ende des Programms
+    PROGRAM_END_RESULTS = "Die Ergebnisse sind gespeichert in:\n{db_path}"
+    PROGRAM_END_LOG = "Ende des Programms. Gesamtlaufzeit: {duration:.2f} Sekunden"
+    PROGRAM_END = "Programmende"

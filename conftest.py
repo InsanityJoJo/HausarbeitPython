@@ -4,8 +4,23 @@ from src.db_tables.base_tbl import Base
 from database.engine import get_engine
 import logging
 from src.status_messages import Messages
+from src.data_loading import DataLoader
 import os
+import pandas as pd
 
+
+@pytest.fixture
+def sample_dataframes(scope="module"):
+    
+    train_loader = DataLoader("data/example_data/train.csv")  # Loader für die train.csv
+    ideal_loader = DataLoader("data/example_data/ideal.csv")  # Loader für die ideal.csv
+    test_loader = DataLoader("data/example_data/test.csv")  # Loader für die test.csv
+
+    train_df = train_loader.load_data()  # Speichern der Trainingsdaten als Dataframe
+    ideal_df = ideal_loader.load_data()  # Speichern der Idealfunktionen als Dataframe
+    test_df = test_loader.load_data()  # Speichern der Testdaten als Dataframe
+
+    return train_df, ideal_df, test_df
 
 
 @pytest.fixture(scope="module")

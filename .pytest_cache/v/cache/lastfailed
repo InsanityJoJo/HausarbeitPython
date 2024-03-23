@@ -1,5 +1,12 @@
 {
   "tests/test_mse.py::TestMathematics::test_calculate_min_mse": true,
   "tests/test_mse.py::TestMathematics::test_incompatible_dataframes": true,
-  "tests/test_mse.py::TestMathematics::test_validate_dfs_with_empty_dfs": true
+  "tests/test_mse.py::TestMathematics::test_validate_dfs_with_empty_dfs": true,
+  "tests/test_db.py::TestDB::test_add_df_to_tbl_failure": true,
+  "tests/test_db.py::TestDB::test_add_df_to_tbl_base_failure": true,
+  "tests/test_db.py::TestDB::test_add_df_to_tbl_train_failure": true,
+  "tests/test_db.py::TestDB::test_db_insertion": true,
+  "tests/test_gui_elements.py::TestGui::test_create_visualisation_window_calls_on_close": true,
+  "tests/test_main.py::TestMainFunction::test_main_function": true,
+  "tests/test_integration.py::test_csv_db_insertion_extraction": true
 }
