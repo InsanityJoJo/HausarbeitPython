@@ -12,17 +12,22 @@ Visualisierungsmöglichkeiten angeboten.
 ## Einrichten
 Anweisungen zur Einrichtung der Arbeitsumgebung und Installation aller notwendigen Abhängigkeiten.
 
-> conda env create -f environment.yml
+``conda env create -f environment.yml``
+
 Dieser Befehl erstellt eine neue Conda-Umgebung mit dem Namen "HausarbeitPython".
 Um diese Umgebung zu aktivieren, verwenden Sie den Befehl:
-> conda activate HausarbeitPython
+
+``conda activate HausarbeitPython``
 
 ## Benutzung
 Navigieren Sie in das Verzeichnis in dem die Datei main.py liegt.
 Beispielsweise:
-(HausarbeitPython) C:\Users\user\Dev\python\HausarbeitPython\src>
+
+``(HausarbeitPython) C:\Users\user\Dev\python\HausarbeitPython\src``
+
 Um das Programm zu starten führen sie bitte die Datei main.py aus.
-> python main.py
+
+``python main.py``
 
 Sie werden nun durch den Dialog auf der Konsole und die GUI-Elemente geleitet. 
 
