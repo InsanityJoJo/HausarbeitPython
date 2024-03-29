@@ -1,8 +1,9 @@
 # Hausarbeit im Kurs Python
-Mit diesem Programm Werden Datensätze von Trainingsdaten, Idealen Funktionen und Testdaten aus CSV-Dateien ausgelesen.
+Dies ist das Programm für die Hausarbeit im Kurs Programmieren mit Python.
+Mit diesem Programm werden Datensätze von Trainingsdaten, Idealen Funktionen und Testdaten aus CSV-Dateien ausgelesen.
 Der Datensatz von 50 Idealen Funktionen wird mit 4 Trainingsfunktionen verglichen.
 Jeder Trainingsfunktion wird die Ideale Funktion mit der kleinsten quadratischen Abweichung zugeordnet. 
-Anschließend werden die so ausgewählten vier idealen Funktionen mit Testdaten validiert. 
+Anschließend werden die so ausgewählten, vier idealen Funktionen mit Testdaten validiert. 
 Zu jedem Testdatenpunkt wird die Y-Abweichung zu den ausgewälten Funktionen berechnet.
 Ist Bedingung (y_punkt-y_ideal)**2 < sqr(2)*y_punkt**2 erfüllt, wird der Punkt der Funktion zugeordnet.
 Die Daten werden in einer SQLite DB gespeischert. Dem Benutzer werden über ein Dialogfenster
